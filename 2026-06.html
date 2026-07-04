@@ -45,7 +45,7 @@
   <div class="card"><div class="num">317</div><div class="lbl">累積評估問卷（+41 本期新增）</div></div>
   <div class="card"><div class="num">768</div><div class="lbl">累積個案追蹤數</div></div>
   <div class="card warn"><div class="num">40.4%</div><div class="lbl">整體未回診率</div></div>
-  <div class="card good"><div class="num">-7.1 kg</div><div class="lbl">Mounjaro 平均成效</div></div>
+  <div class="card good"><div class="num">-7.0 kg</div><div class="lbl">Mounjaro 平均成效</div></div>
   <div class="card"><div class="num">-2.7 kg</div><div class="lbl">全體平均減重成效</div></div>
   <div class="card"><div class="num">41%</div><div class="lbl">高費用意願（8000元以上）</div></div>
 </div>
@@ -105,18 +105,20 @@
   <div class="chart-box tall" style="margin-bottom:16px"><canvas id="drugChart"></canvas></div>
   <table>
     <tr><th>藥物</th><th>人數</th><th>比例</th><th>平均減重 kg（最小, 最大）</th></tr>
-    <tr><td>無用藥／生活型態</td><td>288</td><td>37.5%</td><td>-2.6（-27.5, 3.9）</td></tr>
-    <tr><td><b>Mounjaro</b></td><td>127</td><td>16.5%</td><td><b>-7.1（-21.1, 4）</b></td></tr>
-    <tr><td>Ozempic</td><td>52</td><td>6.8%</td><td>-5.0（-18.2, 1.4）</td></tr>
-    <tr><td>Wegovy</td><td>35</td><td>4.6%</td><td>-3.7（-13.6, 1.1）</td></tr>
-    <tr><td>Contrave</td><td>28</td><td>3.6%</td><td>-3.5（-14.8, 2.7）</td></tr>
-    <tr><td>Rybelsus</td><td>26</td><td>3.4%</td><td>-3.5（-8.7, 0）</td></tr>
-    <tr><td>Jardiance</td><td>26</td><td>3.4%</td><td>-3.0（-18.5, 18.7）</td></tr>
-    <tr><td>Xenical</td><td>23</td><td>3.0%</td><td>-2.8（-12.3, 1.3）</td></tr>
-    <tr><td>Saxenda</td><td>5</td><td>0.7%</td><td>-10.5（-15.6, -5.1）</td></tr>
-    <tr><td>手術評估／轉介</td><td>10</td><td>1.3%</td><td>+0.5（-0.5, 1.8）</td></tr>
+    <tr><td>無用藥／生活型態</td><td>295</td><td>38.4%</td><td>-2.5（-27.5, 3.9）</td></tr>
+    <tr><td><b>Mounjaro</b></td><td>131</td><td>17.1%</td><td><b>-7.0（-21.1, 4）</b></td></tr>
+    <tr><td>Ozempic</td><td>85</td><td>11.1%</td><td>-4.7（-21.6, 7.3）</td></tr>
+    <tr><td>Contrave</td><td>64</td><td>8.3%</td><td>-4.4（-23.4, 9.3）</td></tr>
+    <tr><td>併用／轉換兩種</td><td>42</td><td>5.5%</td><td>-5.7（-18.5, 1.9）</td></tr>
+    <tr><td>Xenical</td><td>39</td><td>5.1%</td><td>-2.3（-12.3, 1.3）</td></tr>
+    <tr><td>Wegovy</td><td>35</td><td>4.6%</td><td>-4.0（-13.6, 1.1）</td></tr>
+    <tr><td>Jardiance</td><td>30</td><td>3.9%</td><td>-2.4（-18.1, 18.7）</td></tr>
+    <tr><td>Rybelsus</td><td>22</td><td>2.9%</td><td>-3.3（-8.7, 0）</td></tr>
+    <tr><td>手術評估／轉介</td><td>11</td><td>1.4%</td><td>-0.9（-5.2, 1.8）</td></tr>
+    <tr><td>Saxenda</td><td>9</td><td>1.2%</td><td>-7.2（-15.6, -0.2）</td></tr>
+    <tr><td>Acarbose</td><td>4</td><td>0.5%</td><td>-3.5（-7.4, 0.7）</td></tr>
   </table>
-  <div class="note">另有約 120 筆用藥欄為數字代碼（1–7）或簡寫，需對照機構用藥代碼表歸類。全體平均減重成效 <b>-2.7 kg</b>（男 -2.4、女 -3.2）。</div>
+  <div class="note">已套用機構用藥代碼表（0=無、1=Contrave、2=Jardiance、3=Ozempic、4=Saxenda、5=Xenical、6=併用兩種）完成全部歸類；僅 1 筆登錄「7」待確認（代碼表無 7）。全體平均減重成效 <b>-2.7 kg</b>（男 -2.4、女 -3.2）。</div>
 </section>
 
 <section>
@@ -141,8 +143,8 @@
   <ol style="padding-left: 24px;">
     <li><b>趨勢延續</b>：30–39 歲主力、中重度肥胖為主、糖尿病/前期居首、青壯年與高 BMI 費用意願最高——前次報告核心結論全數成立。</li>
     <li><b>新客層轉趨複雜</b>：本期新增個案 88% 有減重經驗且共病偏高，建議首診即啟動分層評估與多科轉銜。</li>
-    <li><b>Mounjaro 成效持續領先</b>（127 人、平均 -7.1 kg），可作為進階代謝方案核心用藥。</li>
-    <li><b>資料品質</b>：5 月個案 CSV 為空檔，月對月個案比較失效；請依 SOP 確認每月底正確匯出當月個案檔。</li>
+    <li><b>Mounjaro 成效持續領先</b>（131 人、平均 -7.0 kg），可作為進階代謝方案核心用藥；GLP-1 類藥物（Mounjaro/Ozempic/Wegovy/Saxenda/Rybelsus）合計 282 人，佔用藥個案 61%。</li>
+    <li><b>資料品質</b>：5 月個案 CSV 為空檔，月對月個案比較失效；請依 SOP 確認每月底正確匯出當月個案檔。另 1 筆用藥登錄「7」待確認。</li>
     <li><b>未回診率 40.4% 高於 35% 目標</b>，尤以 30 歲以下為甚，建議推進線上預約與數位追蹤平台。</li>
   </ol>
 </section>
@@ -188,9 +190,9 @@ new Chart(document.getElementById('crossChart'), {
 });
 new Chart(document.getElementById('drugChart'), {
   type: 'bar',
-  data: { labels: ['Mounjaro','Saxenda','Ozempic','Wegovy','Contrave','Rybelsus','Jardiance','Xenical','無用藥/生活型態'],
-    datasets: [{ label: '平均減重(kg)', data: [-7.1,-10.5,-5.0,-3.7,-3.5,-3.5,-3.0,-2.8,-2.6],
-      backgroundColor: [C.green,C.teal,C.blue,C.blue,C.blue,C.blue,C.blue,C.blue,C.gray] }]},
+  data: { labels: ['Saxenda (9人)','Mounjaro (131人)','併用/轉換 (42人)','Ozempic (85人)','Contrave (64人)','Wegovy (35人)','Rybelsus (22人)','無用藥 (295人)','Jardiance (30人)','Xenical (39人)'],
+    datasets: [{ label: '平均減重(kg)', data: [-7.2,-7.0,-5.7,-4.7,-4.4,-4.0,-3.3,-2.5,-2.4,-2.3],
+      backgroundColor: [C.teal,C.green,C.blue,C.blue,C.blue,C.blue,C.blue,C.gray,C.blue,C.blue] }]},
   options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '各藥物平均減重成效（kg）' }, legend: { display: false } } }
 });
 new Chart(document.getElementById('fuChart'), {
