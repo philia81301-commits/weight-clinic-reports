@@ -44,7 +44,7 @@
 <div class="cards">
   <div class="card"><div class="num">317</div><div class="lbl">累積評估問卷（+41 本期新增）</div></div>
   <div class="card"><div class="num">768</div><div class="lbl">累積個案追蹤數</div></div>
-  <div class="card warn"><div class="num">40.4%</div><div class="lbl">整體未回診率</div></div>
+  <div class="card warn"><div class="num">38.1%</div><div class="lbl">未回診率（結算至5月底）</div></div>
   <div class="card good"><div class="num">-7.0 kg</div><div class="lbl">Mounjaro 平均成效</div></div>
   <div class="card"><div class="num">-2.7 kg</div><div class="lbl">全體平均減重成效</div></div>
   <div class="card"><div class="num">41%</div><div class="lbl">高費用意願（8000元以上）</div></div>
@@ -122,18 +122,24 @@
 </section>
 
 <section>
-  <h2>六、未回診率分析</h2>
-  <div class="chart-row">
+  <h2>六、未回診率分析（雙軌計算）</h2>
+  <p>正式數據採<b>方法B（結算至前一月底）</b>：排除初診於 2026 年 6 月（含之後）的 43 筆個案——當月新增個案可能下月才首次回診，計入會高估流失率。方法A 全數計入僅供對照。</p>
+  <table>
+    <tr><th>族群</th><th>方法B：結算至5月底（正式，n=725）</th><th>方法A：全部個案（參考，n=768）</th></tr>
+    <tr><td><b>整體</b></td><td><b>38.1%</b>（276/725）</td><td>40.4%（310/768）</td></tr>
+    <tr><td>男性</td><td>37.7%</td><td>40.9%</td></tr>
+    <tr><td>女性</td><td>38.4%</td><td>39.6%</td></tr>
+    <tr><td>30歲以下</td><td><b>42.9%</b>（最高）</td><td>45.5%</td></tr>
+    <tr><td>30-39歲</td><td>39.1%</td><td>41.6%</td></tr>
+    <tr><td>40-49歲</td><td>37.7%</td><td>41.4%</td></tr>
+    <tr><td>50-59歲</td><td>38.7%</td><td>39.5%</td></tr>
+    <tr><td>60歲以上</td><td>29.8%（最低）</td><td>30.8%</td></tr>
+  </table>
+  <div class="chart-row" style="margin-top:16px">
     <div class="chart-box"><canvas id="fuChart"></canvas></div>
     <div>
-      <table>
-        <tr><th>族群</th><th>未回診率</th></tr>
-        <tr><td>整體</td><td><b>40.4%</b>（310/768）</td></tr>
-        <tr><td>男性</td><td>40.9%</td></tr>
-        <tr><td>女性</td><td>39.6%</td></tr>
-      </table>
-      <div class="alert">30 歲以下未回診率最高（45.5%），60 歲以上最低（30.8%）。年輕族群留診策略（數位化服務、彈性方案）為優先改善目標。目標值：&lt;35%。</div>
-      <div class="note">注意：未回診率含近一個月才初診、尚無機會回診之個案，實際流失率略低於此數字。</div>
+      <div class="alert">正式未回診率 <b>38.1%</b> 仍高於 35% 目標。30 歲以下最高（42.9%），60 歲以上最低（29.8%）。年輕族群留診策略（數位化服務、彈性方案）為優先改善目標。</div>
+      <div class="note">結算規則：每次分析時，未回診率只計算至前一個月底前初診的個案（本次截止 2026/5/31），此規則自本版起為固定口徑。</div>
     </div>
   </div>
 </section>
@@ -145,7 +151,7 @@
     <li><b>新客層轉趨複雜</b>：本期新增個案 88% 有減重經驗且共病偏高，建議首診即啟動分層評估與多科轉銜。</li>
     <li><b>Mounjaro 成效持續領先</b>（131 人、平均 -7.0 kg），可作為進階代謝方案核心用藥；GLP-1 類藥物（Mounjaro/Ozempic/Wegovy/Saxenda/Rybelsus）合計 282 人，佔用藥個案 61%。</li>
     <li><b>資料品質</b>：5 月個案 CSV 為空檔，月對月個案比較失效；請依 SOP 確認每月底正確匯出當月個案檔。另 1 筆用藥登錄「7」待確認。</li>
-    <li><b>未回診率 40.4% 高於 35% 目標</b>，尤以 30 歲以下為甚，建議推進線上預約與數位追蹤平台。</li>
+    <li><b>正式未回診率 38.1%（結算至5月底）仍高於 35% 目標</b>，尤以 30 歲以下為甚（42.9%），建議推進線上預約與數位追蹤平台。自本版起未回診率固定採「結算至前一月底」口徑。</li>
   </ol>
 </section>
 
@@ -198,8 +204,11 @@ new Chart(document.getElementById('drugChart'), {
 new Chart(document.getElementById('fuChart'), {
   type: 'bar',
   data: { labels: ['30歲以下','30-39歲','40-49歲','50-59歲','60歲以上'],
-    datasets: [{ label: '未回診率(%)', data: [45.5,41.6,41.4,39.5,30.8], backgroundColor: [C.red,C.orange,C.orange,'#f1c40f',C.green] }]},
-  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '各年齡層未回診率' }, legend: { display: false } }, scales: { y: { max: 50 } } }
+    datasets: [
+      { label: '方法B 結算至5月底(正式)', data: [42.9,39.1,37.7,38.7,29.8], backgroundColor: C.red },
+      { label: '方法A 全部個案(參考)', data: [45.5,41.6,41.4,39.5,30.8], backgroundColor: C.gray }
+    ]},
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '各年齡層未回診率（雙軌）' } }, scales: { y: { max: 50 } } }
 });
 </script>
 </body>
