@@ -170,7 +170,11 @@
     <tr><td>併用/轉換兩種（43）</td><td>6.2% [3]</td><td>6.6% [8]</td><td>9.7% [4]</td><td><b>9.8%</b> [12]</td></tr>
     <tr><td>Ozempic（85）</td><td>4.5% [30]</td><td>8.2% [5]</td><td>5.7% [4]</td><td>6.0% [7]</td></tr>
     <tr><td>Contrave（64）</td><td>4.1% [11]</td><td>6.4% [5]</td><td>9.9% [1]</td><td>7.9% [9]</td></tr>
+    <tr><td>Wegovy（35）</td><td>9.5% [1]</td><td>10.2% [1]</td><td>10.9% [1]</td><td>—</td></tr>
+    <tr><td>Xenical（39）</td><td>3.1% [3]</td><td>4.4% [2]</td><td>5.9% [1]</td><td>8.4% [3]</td></tr>
     <tr><td>Jardiance（29）</td><td>4.1% [9]</td><td>4.5% [2]</td><td>1.8% [1]</td><td>7.7% [3]</td></tr>
+    <tr><td>Rybelsus（22）</td><td>6.0% [2]</td><td>—</td><td>7.4% [1]</td><td>—</td></tr>
+    <tr><td>Saxenda（9）</td><td>5.8% [3]</td><td>—</td><td>17.7% [1]</td><td>6.6% [1]</td></tr>
     <tr><td>無用藥/生活型態（295）</td><td>1.8% [26]</td><td>3.8% [7]</td><td>3.9% [5]</td><td>7.3% [20]</td></tr>
   </table>
   <div class="note">[n] 為組別人數，n<5 僅供方向參考。留診滿半年者平均跨過「減重≥5%具臨床意義」門檻；Mounjaro 追蹤9-11個月達 15.0%（≥10% 顯著臨床效益等級）。方法學：每人僅有最後一次回診體重，為區間分組而非逐月軌跡。</div>
@@ -251,6 +255,7 @@ new Chart(document.getElementById('msDrugChart'), {
   data: { labels: ['3-5月','6-8月','9-11月','≥12月'],
     datasets: [
       { label: 'Mounjaro', data: [8.5,10.8,15.0,11.5], backgroundColor: C.dark },
+      { label: 'Wegovy (各期n=1)', data: [9.5,10.2,10.9,null], backgroundColor: C.orange },
       { label: 'Ozempic', data: [4.5,8.2,5.7,6.0], backgroundColor: C.teal },
       { label: '併用/轉換', data: [6.2,6.6,9.7,9.8], backgroundColor: C.purple },
       { label: '無用藥', data: [1.8,3.8,3.9,7.3], backgroundColor: C.gray }
