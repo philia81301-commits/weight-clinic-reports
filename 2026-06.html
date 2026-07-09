@@ -145,13 +145,46 @@
 </section>
 
 <section>
-  <h2>七、結論與行動建議</h2>
+  <h2>七、里程碑減重百分比分析</h2>
+  <p>減重% =（初診體重V1 − 最後回診體重V2）÷ V1 × 100，正值為減重。極端值規則：增重>20% 之個案排除於平均外（本次排除 1 筆轉藥後增重個案，13個月 72.1→90.8kg，建議臨床檢視）。</p>
+  <div class="chart-row">
+    <div class="chart-box"><canvas id="retChart"></canvas></div>
+    <div>
+      <table>
+        <tr><th>追蹤時長</th><th>人數</th><th>佔全體(768)</th><th>佔回診者(350)</th></tr>
+        <tr><td>滿 3 個月</td><td>249</td><td>32.4%</td><td>71.1%</td></tr>
+        <tr><td>滿 6 個月</td><td>128</td><td>16.7%</td><td>36.6%</td></tr>
+        <tr><td>滿 9 個月</td><td>85</td><td>11.1%</td><td>24.3%</td></tr>
+        <tr><td>滿 12 個月</td><td>61</td><td>7.9%</td><td>17.4%</td></tr>
+      </table>
+      <div class="alert"><b>3→6 個月是最大流失斷層</b>（71%→37%），留診介入時點應放在第 3~4 個月的回診提醒與療程續約設計。</div>
+    </div>
+  </div>
+  <div class="chart-row" style="margin-top:16px">
+    <div class="chart-box"><canvas id="msOverallChart"></canvas></div>
+    <div class="chart-box"><canvas id="msDrugChart"></canvas></div>
+  </div>
+  <table style="margin-top:16px">
+    <tr><th>藥品（總人數）</th><th>追蹤3-5月</th><th>追蹤6-8月</th><th>追蹤9-11月</th><th>追蹤≥12月</th></tr>
+    <tr><td><b>Mounjaro</b>（131）</td><td><b>8.5%</b> [29]</td><td><b>10.8%</b> [13]</td><td><b>15.0%</b> [5]</td><td>11.5% [3]</td></tr>
+    <tr><td>併用/轉換兩種（43）</td><td>6.2% [3]</td><td>6.6% [8]</td><td>9.7% [4]</td><td><b>9.8%</b> [12]</td></tr>
+    <tr><td>Ozempic（85）</td><td>4.5% [30]</td><td>8.2% [5]</td><td>5.7% [4]</td><td>6.0% [7]</td></tr>
+    <tr><td>Contrave（64）</td><td>4.1% [11]</td><td>6.4% [5]</td><td>9.9% [1]</td><td>7.9% [9]</td></tr>
+    <tr><td>Jardiance（29）</td><td>4.1% [9]</td><td>4.5% [2]</td><td>1.8% [1]</td><td>7.7% [3]</td></tr>
+    <tr><td>無用藥/生活型態（295）</td><td>1.8% [26]</td><td>3.8% [7]</td><td>3.9% [5]</td><td>7.3% [20]</td></tr>
+  </table>
+  <div class="note">[n] 為組別人數，n<5 僅供方向參考。留診滿半年者平均跨過「減重≥5%具臨床意義」門檻；Mounjaro 追蹤9-11個月達 15.0%（≥10% 顯著臨床效益等級）。方法學：每人僅有最後一次回診體重，為區間分組而非逐月軌跡。</div>
+</section>
+
+<section>
+  <h2>八、結論與行動建議</h2>
   <ol style="padding-left: 24px;">
     <li><b>趨勢延續</b>：30–39 歲主力、中重度肥胖為主、糖尿病/前期居首、青壯年與高 BMI 費用意願最高——前次報告核心結論全數成立。</li>
     <li><b>新客層轉趨複雜</b>：本期新增個案 88% 有減重經驗且共病偏高，建議首診即啟動分層評估與多科轉銜。</li>
     <li><b>Mounjaro 成效持續領先</b>（131 人、平均 -7.0 kg），可作為進階代謝方案核心用藥；GLP-1 類藥物（Mounjaro/Ozempic/Wegovy/Saxenda/Rybelsus）合計 282 人，佔用藥個案 61%。</li>
     <li><b>資料品質</b>：5 月個案 CSV 為空檔，月對月個案比較失效；請依 SOP 確認每月底正確匯出當月個案檔。另 1 筆用藥登錄「7」待確認。</li>
     <li><b>正式未回診率 38.1%（結算至5月底）仍高於 35% 目標</b>，尤以 30 歲以下為甚（42.9%），建議推進線上預約與數位追蹤平台。自本版起未回診率固定採「結算至前一月底」口徑。</li>
+    <li><b>里程碑分析揭示 3→6 個月流失斷層</b>（回診者留存 71%→37%）：留下來滿半年者平均減重跨過 5% 臨床門檻、9-11 個月達 8.7% 高峰，「撐過前 6 個月」是成效關鍵，建議把續診激勵集中在第 3~4 個月。</li>
   </ol>
 </section>
 
@@ -200,6 +233,29 @@ new Chart(document.getElementById('drugChart'), {
     datasets: [{ label: '平均減重(kg)', data: [-7.2,-7.0,-5.7,-4.7,-4.4,-4.0,-3.3,-2.5,-2.4,-2.3],
       backgroundColor: [C.teal,C.green,C.blue,C.blue,C.blue,C.blue,C.blue,C.gray,C.blue,C.blue] }]},
   options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '各藥物平均減重成效（kg）' }, legend: { display: false } } }
+});
+new Chart(document.getElementById('retChart'), {
+  type: 'bar',
+  data: { labels: ['滿3個月','滿6個月','滿9個月','滿12個月'],
+    datasets: [{ label: '人數', data: [249,128,85,61], backgroundColor: C.blue }]},
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '追蹤留存遞減（累計人數）' }, legend: { display: false } } }
+});
+new Chart(document.getElementById('msOverallChart'), {
+  type: 'bar',
+  data: { labels: ['追蹤3-5月 (n=118)','追蹤6-8月 (n=43)','追蹤9-11月 (n=24)','追蹤≥12月 (n=60)'],
+    datasets: [{ label: '平均減重%', data: [5.0,7.5,8.7,8.0], backgroundColor: C.teal }]},
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '各追蹤區間平均減重%（不分方式）' }, legend: { display: false } } }
+});
+new Chart(document.getElementById('msDrugChart'), {
+  type: 'bar',
+  data: { labels: ['3-5月','6-8月','9-11月','≥12月'],
+    datasets: [
+      { label: 'Mounjaro', data: [8.5,10.8,15.0,11.5], backgroundColor: C.dark },
+      { label: 'Ozempic', data: [4.5,8.2,5.7,6.0], backgroundColor: C.teal },
+      { label: '併用/轉換', data: [6.2,6.6,9.7,9.8], backgroundColor: C.purple },
+      { label: '無用藥', data: [1.8,3.8,3.9,7.3], backgroundColor: C.gray }
+    ]},
+  options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: '各追蹤區間平均減重%（依藥品）' } } }
 });
 new Chart(document.getElementById('fuChart'), {
   type: 'bar',
