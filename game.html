@@ -38,6 +38,7 @@
   .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; text-align: center; font-weight: 700; font-size: 1.05em; }
   .btn.selected { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
   .btn .em { margin-right: 8px; }
+  .btn .chk { margin-right: 10px; color: var(--brand); font-size: 1.1em; }
 
   .progress { display: flex; align-items: center; gap: 12px; margin: 6px 2px 4px; }
   .progress .track { flex: 1; height: 10px; background: var(--line); border-radius: 999px; overflow: hidden; }
@@ -216,7 +217,7 @@ const QUESTIONS = [
     opts:[ ['🧒','30 歲以下','<30'], ['🧑','30 – 39 歲','30-39'], ['🧔','40 – 49 歲','40-49'], ['👨‍🦳','50 – 59 歲','50-59'], ['👴','60 歲以上','60+'] ],
     fact:'📊 門診冷知識：30–39 歲是本院最大族群（94/317 人），也是費用意願最高的一群（51% 願月付 8000 元以上）。' },
   { id:'comorbid', title:'第 3 關：你有下列哪些健康狀況？', sub:'可複選，選完按「確定」', multi:true,
-    opts:[ ['🍬','糖尿病或糖尿病前期','dm'], ['🫀','高血壓','htn'], ['🩸','高血脂','lipid'], ['🫁','睡眠呼吸中止／打鼾嚴重','osa'], ['🟡','脂肪肝','fl'], ['🌸','多囊性卵巢','pcos'], ['✅','以上皆無','none'] ],
+    opts:[ ['🍬','糖尿病或糖尿病前期','dm'], ['🫀','高血壓','htn'], ['🩸','高血脂','lipid'], ['🫁','睡眠呼吸中止／打鼾嚴重','osa'], ['🟡','脂肪肝','fl'], ['🌸','多囊性卵巢','pcos'], ['🙅','以上皆無','none'] ],
     fact:'📊 門診冷知識：糖尿病／前期是本院最常見共病（116/317 人）；減重 5–10% 就能明顯改善血糖與脂肪肝。' },
   { id:'exp', title:'第 4 關：你的減重冒險資歷？', sub:'',
     opts:[ ['🐣','新手村：第一次認真減重','first'], ['🔄','轉生者：試過 1–2 次，減了又復胖','rebound'], ['⚔️','老兵：多次嘗試，什麼方法都試過了','veteran'] ],
@@ -313,7 +314,8 @@ function renderQ() {
   multiSel = new Set();
   q.opts.forEach(([em, label, val]) => {
     const b = document.createElement('button');
-    b.className = 'btn'; b.innerHTML = `<span class="em">${em}</span>${label}`;
+    b.className = 'btn';
+    b.innerHTML = (q.multi ? '<span class="chk">☐</span>' : '') + `<span class="em">${em}</span>${label}`;
     b.onclick = () => q.multi ? toggleMulti(b, val) : answer(q.id, val);
     box.appendChild(b);
   });
@@ -321,10 +323,17 @@ function renderQ() {
 }
 
 function toggleMulti(btn, val) {
-  if (val === 'none') { multiSel.clear(); multiSel.add('none'); document.querySelectorAll('#q-opts .btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); return; }
+  if (val === 'none') { multiSel.clear(); multiSel.add('none'); document.querySelectorAll('#q-opts .btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); syncChecks(); return; }
   multiSel.delete('none');
   document.querySelectorAll('#q-opts .btn').forEach(b => { if (b.textContent.includes('以上皆無')) b.classList.remove('selected'); });
   if (multiSel.has(val)) { multiSel.delete(val); btn.classList.remove('selected'); } else { multiSel.add(val); btn.classList.add('selected'); }
+  syncChecks();
+}
+function syncChecks() {
+  document.querySelectorAll('#q-opts .btn').forEach(b => {
+    const chk = b.querySelector('.chk');
+    if (chk) chk.textContent = b.classList.contains('selected') ? '☑' : '☐';
+  });
 }
 function confirmMulti() { if (multiSel.size === 0) multiSel.add('none'); answer(QUESTIONS[qIndex].id, [...multiSel]); }
 function answer(id, val) { answers[id] = val; qIndex++; qIndex < QUESTIONS.length ? renderQ() : showResult(); }
