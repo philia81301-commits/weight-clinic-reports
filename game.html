@@ -1,373 +1,809 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>減重大冒險：找出你的專屬減重路線</title>
-<style>
-  :root {
-    --bg: #f4f6f9; --surface: #ffffff; --ink: #2c3e50; --ink-2: #5d6d7e; --ink-3: #95a5a6;
-    --brand: #2e86c1; --brand-dark: #1a5276; --accent: #e67e22; --good: #27ae60;
-    --bar-ctx: #c3cdd6; --line: #dde4ea; --note-bg: #fef9e7; --note-line: #f1c40f;
-    --shadow: 0 2px 10px rgba(0,0,0,.08);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #12181f; --surface: #1c242e; --ink: #e8edf2; --ink-2: #aab8c5; --ink-3: #7a8a99;
-      --brand: #4da3d8; --brand-dark: #82c0e8; --bar-ctx: #45525f; --line: #313d4a;
-      --note-bg: #2a2617; --note-line: #b7950b; --shadow: 0 2px 10px rgba(0,0,0,.4);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>減重大冒險：找出你的專屬減重路線</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'media',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              light: '#d1e2c4', /* 飽和清新淺綠 */
+              DEFAULT: '#5e834d', /* 豐饒森林綠 (Mossy Emerald) */
+              dark: '#38522c', /* 深沉松針綠 */
+            },
+            coral: {
+              light: '#fad6bf', /* 溫暖杏橘沙 */
+              DEFAULT: '#d97d4c', /* 陽光暖焦糖橘 (Terracotta Accent) */
+              dark: '#a44d1e', /* 濃郁焦糖褐 */
+            },
+            success: '#729366', /* 亮麗草本綠 */
+            warning: '#e49e63', /* 金色麥田黃 */
+            danger: '#d48574', /* 暖秋楓葉紅 */
+          }
+        }
+      }
     }
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.65; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
-  .screen { display: none; animation: fadeUp .35s ease; }
-  .screen.on { display: block; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  </script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .fade-up-active {
+      animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pointerBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .pointer-bounce {
+      animation: pointerBounce 1.2s infinite ease-in-out;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.15); }
+    }
+    .pulse-glow {
+      animation: pulseGlow 1.8s infinite ease-in-out;
+    }
 
-  .hero { background: linear-gradient(135deg, #1a5276, #2e86c1); color: #fff; border-radius: 16px; padding: 40px 28px; text-align: center; box-shadow: var(--shadow); }
-  .hero h1 { font-size: 1.7em; margin-bottom: 10px; }
-  .hero p { opacity: .92; font-size: .98em; }
-  .hero .badge { display: inline-block; background: rgba(255,255,255,.18); border-radius: 999px; padding: 4px 14px; font-size: .82em; margin-bottom: 14px; }
-
-  .card { background: var(--surface); border-radius: 14px; padding: 24px; margin-top: 16px; box-shadow: var(--shadow); }
-  .btn { display: block; width: 100%; border: 2px solid var(--line); background: var(--surface); color: var(--ink);
-    border-radius: 12px; padding: 14px 18px; font-size: 1em; font-family: inherit; text-align: left;
-    cursor: pointer; margin-top: 10px; transition: border-color .15s, transform .1s; }
-  .btn:hover, .btn:focus-visible { border-color: var(--brand); transform: translateY(-1px); }
-  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; text-align: center; font-weight: 700; font-size: 1.05em; }
-  .btn.selected { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
-  .btn .em { margin-right: 8px; }
-  .btn .chk { margin-right: 10px; color: var(--brand); font-size: 1.1em; }
-
-  .progress { display: flex; align-items: center; gap: 12px; margin: 6px 2px 4px; }
-  .progress .track { flex: 1; height: 10px; background: var(--line); border-radius: 999px; overflow: hidden; }
-  .progress .fill { height: 100%; background: linear-gradient(90deg, var(--brand), var(--good)); border-radius: 999px; width: 0; transition: width .4s ease; }
-  .progress .step { font-size: .85em; color: var(--ink-2); white-space: nowrap; }
-
-  .fact { background: var(--note-bg); border-left: 4px solid var(--note-line); border-radius: 8px; padding: 10px 14px; font-size: .88em; margin-bottom: 14px; color: var(--ink); }
-  .q-title { font-size: 1.2em; font-weight: 700; margin-bottom: 4px; }
-  .q-sub { color: var(--ink-2); font-size: .9em; margin-bottom: 8px; }
-
-  .result-hero { border-radius: 16px; padding: 30px 24px; text-align: center; color: #fff;
-    background: linear-gradient(135deg, #1a5276, #16a085); box-shadow: var(--shadow); }
-  .result-hero .em-big { font-size: 3em; display: block; margin-bottom: 6px; }
-  .result-hero h2 { font-size: 1.5em; margin-bottom: 6px; }
-  .result-hero p { opacity: .93; font-size: .95em; }
-
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 14px; }
-  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; }
-  .stat .v { font-size: 1.45em; font-weight: 700; color: var(--brand); }
-  .stat .k { font-size: .8em; color: var(--ink-2); margin-top: 2px; }
-
-  h3.sec { color: var(--brand-dark); font-size: 1.05em; margin-bottom: 10px; border-left: 4px solid var(--brand); padding-left: 10px; }
-  .bars { margin-top: 6px; }
-  .bar-row { display: grid; grid-template-columns: 150px 1fr 66px; align-items: center; gap: 8px; margin: 7px 0; font-size: .88em; }
-  .bar-row .name { color: var(--ink-2); text-align: right; }
-  .bar-row.hl .name { color: var(--ink); font-weight: 700; }
-  .bar-track { background: none; height: 16px; position: relative; }
-  .bar-fill { height: 100%; background: var(--bar-ctx); border-radius: 0 4px 4px 0; min-width: 3px; transition: width .6s ease; }
-  .bar-row.hl .bar-fill { background: var(--brand); }
-  .bar-row .val { color: var(--ink); font-variant-numeric: tabular-nums; }
-  .bar-note { font-size: .78em; color: var(--ink-3); margin-top: 6px; }
-  @media (max-width: 520px) {
-    .bar-row { grid-template-columns: 1fr 66px; row-gap: 2px; margin: 10px 0; }
-    .bar-row .name { grid-column: 1 / -1; text-align: left; }
-  }
-
-  .tip { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-top: 10px; font-size: .92em; }
-  .tip .ic { font-size: 1.2em; line-height: 1.3; }
-
-  .boss { border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-radius: 14px; padding: 20px; margin-top: 16px; }
-  .boss h3 { color: var(--accent); margin-bottom: 8px; }
-  .boss table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: .88em; }
-  .boss th, .boss td { border: 1px solid var(--line); padding: 6px 8px; text-align: center; }
-  .runner { color: var(--ink-2); font-size: .92em; margin-top: 12px; }
-
-  .disclaimer { font-size: .8em; color: var(--ink-3); margin-top: 20px; text-align: center; }
-  footer { text-align: center; color: var(--ink-3); font-size: .8em; margin-top: 30px; }
-</style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(94, 131, 77, 0.3);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(94, 131, 77, 0.5);
+    }
+  </style>
 </head>
-<body>
-<div class="wrap">
+<body class="bg-[#fcfaf2] dark:bg-[#161412] text-stone-700 dark:text-stone-200 min-h-screen font-sans transition-colors duration-300">
 
-  <!-- ═══ 開始畫面 ═══ -->
-  <div class="screen on" id="scr-start">
-    <div class="hero">
-      <span class="badge">📊 根據本院 768 筆個案真實成效統計</span>
-      <h1>⚔️ 減重大冒險</h1>
-      <p>回答 7 個關卡問題，找出最適合你的減重路線。<br>每一關都藏著一則門診真實數據冷知識！</p>
-    </div>
-    <div class="card">
-      <p style="font-size:.95em">你將扮演一位準備踏上減重旅程的冒險者。系統會依據高榮代謝減重中心 <b>317 份評估問卷</b> 與 <b>768 筆個案追蹤</b> 的匿名彙總統計，為你配對五大減重路線之一——並告訴你走這條路的前輩們實際減了多少。</p>
-      <button class="btn primary" onclick="startGame()">🚀 開始冒險</button>
-      <p class="disclaimer">本遊戲僅供衛教與趣味參考，並非醫療診斷。實際治療方式請由醫師依個別狀況評估。</p>
+  <div class="relative overflow-hidden min-h-screen flex flex-col justify-between">
+    <!-- 背景裝飾溫暖大地光暈（飽和度微增） -->
+    <div class="absolute top-0 left-1/4 w-[350px] h-[350px] bg-brand-light/15 dark:bg-brand-dark/10 blur-3xl pointer-events-none rounded-full"></div>
+    <div class="absolute top-20 right-1/4 w-[300px] h-[300px] bg-coral-light/15 dark:bg-coral-dark/10 blur-3xl pointer-events-none rounded-full"></div>
+
+    <div class="w-full max-w-2xl mx-auto px-4 py-8 relative z-10 flex-grow flex flex-col justify-center">
+
+      <!-- ═══ 開始畫面 ═══ -->
+      <div id="scr-start" class="screen fade-up-active space-y-6">
+        <div class="bg-gradient-to-br from-[#5e834d] via-[#85ad73] to-[#d97d4c] text-white rounded-3xl p-8 text-center shadow-xl shadow-brand/20 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 text-xs font-semibold backdrop-blur-md mb-4 border border-white/25">
+            🌱 陪伴 768 位夥伴共同寫下的真實改變
+          </span>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">⚔️ 減重大冒險</h1>
+          <p class="text-sm md:text-base text-stone-50 max-w-md mx-auto leading-relaxed font-semibold">
+            簡單回答 7 個趣味關卡，探索最適合你的健康里程碑。<br class="hidden sm:inline">每一步都藏著溫柔又實用的門診小秘密！
+          </p>
+        </div>
+
+        <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 sm:p-8 shadow-md shadow-stone-300/10 dark:shadow-none space-y-6 backdrop-blur">
+          <div class="flex items-start gap-4">
+            <div class="p-3 bg-brand-light/20 dark:bg-brand-dark/30 text-brand dark:text-brand-light rounded-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-stone-800 dark:text-white">出發前的溫馨準備</h3>
+              <p class="text-sm text-stone-600 dark:text-stone-300 mt-1 leading-relaxed">
+                你將踏上一場為自己量身打造的健康冒險。本系統融合了高榮代謝減重中心 <b class="text-brand dark:text-brand-light">317 份評估問卷</b> 與 <b class="text-brand dark:text-brand-light">768 筆匿名個案數據</b>，為你暖心分析最匹配的五大健康方向。
+              </p>
+            </div>
+          </div>
+
+          <button onclick="startGame()" class="w-full py-4 px-6 bg-brand hover:bg-brand-dark text-white font-bold text-lg rounded-xl shadow-lg shadow-brand/20 hover:shadow-brand/30 transform active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2">
+            🚀 展開健康旅程
+          </button>
+
+          <p class="text-xs text-center text-stone-400 dark:text-stone-500 leading-relaxed border-t border-stone-200 dark:border-stone-800 pt-4">
+            ⚠️ 本遊戲僅供衛教與趣味學習參考，非直接醫療診斷。最安心的規劃請務必諮詢專業醫療團隊。
+          </p>
+        </div>
+      </div>
+
+      <!-- ═══ 問題畫面 ═══ -->
+      <div id="scr-quiz" class="screen hidden space-y-6">
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <span id="prog-step" class="text-xs font-bold text-brand dark:text-brand-light bg-brand-light/30 dark:bg-brand-dark/35 px-3 py-1 rounded-full">第 1 / 7 步</span>
+            <span class="text-xs font-semibold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Health Journey</span>
+          </div>
+          <div class="w-full h-3 bg-stone-200 dark:bg-stone-800 rounded-full overflow-visible relative shadow-inner">
+            <div id="prog-fill" class="h-full bg-gradient-to-r from-brand-light via-brand to-coral rounded-full transition-all duration-300 relative" style="width: 0%">
+              <!-- 關卡動態探險家圖示 -->
+              <div id="prog-runner" class="absolute -right-3.5 -top-2 bg-[#fcfaf2] dark:bg-stone-800 border border-coral-light dark:border-stone-700 shadow-md rounded-full w-7 h-7 flex items-center justify-center text-xs transition-all duration-300 pointer-bounce">
+                🚶‍♂️
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 問題本體卡片 -->
+        <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 sm:p-8 shadow-md shadow-stone-300/10 dark:shadow-none space-y-6 backdrop-blur">
+          <!-- 上一關門診小常識 -->
+          <div id="q-fact-container" class="hidden">
+            <div class="bg-[#f4f0e6] dark:bg-stone-900 border-l-4 border-brand rounded-r-xl p-4 text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+              <span class="font-bold text-brand dark:text-brand-light block mb-0.5">💡 給夥伴的暖心小筆記：</span>
+              <span id="q-fact"></span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h2 id="q-title" class="text-lg sm:text-xl font-bold text-stone-800 dark:text-white tracking-tight"></h2>
+            <p id="q-sub" class="text-xs text-stone-500 dark:text-stone-400"></p>
+          </div>
+
+          <div id="bmi-calc-widget" class="hidden bg-stone-50/80 dark:bg-stone-950/40 p-4 rounded-xl border border-stone-200 dark:border-stone-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
+                🧮 試試一鍵輸入，幫你秒懂數值
+              </span>
+              <span id="bmi-calc-result" class="text-xs font-extrabold text-brand dark:text-brand-light"></span>
+            </div>
+            
+            <div class="relative pt-1 pb-1">
+              <!-- 大地色系 BMI 飽和彩帶 -->
+              <div class="h-2.5 w-full rounded-full relative shadow-inner" style="background: linear-gradient(to right, #b3cfa2, #e4d682, #e49e63, #da8d68, #a44d1e);">
+                <div id="bmi-arrow" class="absolute top-0 -mt-2.5 -ml-1.5 transition-all duration-500 pointer-bounce" style="left: 0%; display: none;">
+                  <div class="text-[12px] text-coral dark:text-coral-light filter drop-shadow">▼</div>
+                </div>
+              </div>
+              <div class="flex justify-between text-[9px] text-stone-400 dark:text-stone-500 mt-1 px-1 font-bold">
+                <span>&lt;24 輕盈健康</span>
+                <span>24-27 稍微過重</span>
+                <span>27-30 溫馨提醒</span>
+                <span>30-35 高度關注</span>
+                <span>&gt;35 傾力呵護</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-stone-400 dark:text-stone-500 mb-1">身高 (cm)</label>
+                <input type="number" id="calc-height" placeholder="例如：170" class="w-full px-3 py-2 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-stone-400 dark:text-stone-500 mb-1">體重 (kg)</label>
+                <input type="number" id="calc-weight" placeholder="例如：75" class="w-full px-3 py-2 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+              </div>
+            </div>
+          </div>
+
+          <!-- 選項容器 -->
+          <div id="q-opts" class="space-y-3"></div>
+
+          <!-- 多選確認按鈕 -->
+          <button id="q-confirm" class="hidden w-full py-3.5 px-6 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl transform active:scale-[0.99] transition-all duration-150 text-center shadow-lg shadow-brand/10" onclick="confirmMulti()">
+            選好了，下一關前記 →
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ 結果畫面 ═══ -->
+      <div id="scr-result" class="screen hidden space-y-6">
+        
+        <!-- 大地色系高飽和路線大看板 -->
+        <div id="r-hero" class="bg-gradient-to-br from-[#5e834d] via-[#7ba467] to-[#d97d4c] text-white rounded-3xl p-8 text-center shadow-xl shadow-brand/20 relative overflow-hidden">
+        </div>
+
+        <!-- 數據統計區 -->
+        <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 shadow-md shadow-stone-300/10 dark:shadow-none space-y-5 backdrop-blur">
+          <h3 class="text-base font-bold text-stone-800 dark:text-white flex items-center gap-2 border-l-4 border-brand pl-3">
+            🏆 攜手前行的夥伴成果（門診匿名追蹤）
+          </h3>
+          <!-- 統計數字格 -->
+          <div id="r-stats" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+          
+          <div id="r-desc" class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed bg-stone-50/50 dark:bg-[#1a1815] p-4 rounded-xl border border-stone-200/50 dark:border-stone-800/80"></div>
+        </div>
+
+        <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 shadow-md shadow-stone-300/10 dark:shadow-none space-y-4 backdrop-blur">
+          <div class="space-y-1">
+            <h3 class="text-base font-bold text-stone-800 dark:text-white flex items-center gap-2 border-l-4 border-brand pl-3">
+              📊 各路線平均減重成果一覽 (kg)
+            </h3>
+            <p class="text-[11px] text-stone-400 dark:text-stone-500 pl-4">
+              資料來源：高榮個案追蹤檔 768 筆（2026-07 修正歸類後）。Saxenda 單獨使用僅 8 人、樣本過小不列入比較。專屬你的推薦方向已特別高亮。
+            </p>
+          </div>
+
+          <!-- 動態條形圖渲染區 -->
+          <div id="r-bars" class="space-y-3.5 pt-2"></div>
+        </div>
+
+        <!-- 個人化專屬情報 -->
+        <div id="r-tips-card" class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 shadow-md shadow-stone-300/10 dark:shadow-none space-y-4 backdrop-blur">
+          <h3 class="text-base font-bold text-stone-800 dark:text-white flex items-center gap-2 border-l-4 border-brand pl-3">
+            🎯 給你的暖心專屬提案
+          </h3>
+          <div id="r-tips" class="space-y-3"></div>
+        </div>
+
+        <!-- 成長關卡生存時間軸 -->
+        <div class="bg-gradient-to-br from-coral-light/10 via-coral-light/20 to-transparent dark:from-stone-900/60 dark:to-transparent border-2 border-[#eed7c5] dark:border-stone-800 rounded-2xl p-6 space-y-5">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl animate-bounce">🌻</span>
+            <div>
+              <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">旅程關鍵：第 3～6 個月「習慣養成期」</h3>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400">無論哪條路線，守護健康最珍貴的都是「恆心與堅持」！</p>
+            </div>
+          </div>
+
+          <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+            門診數據顯示：從滿 3 個月的 <b class="text-brand font-bold">71.1%</b> 穩定回診，到第 6 個月時往往面臨懈怠，降低到 <b class="text-coral-dark font-bold">36.6%</b>。
+            <b class="text-stone-700 dark:text-stone-200">但請記得：堅持滿半年的夥伴，平均減重幅度已跨過 5% 的臨床意義門檻！</b>
+          </p>
+
+          <!-- 溫馨版關卡歷程時間軸 -->
+          <div class="relative py-4">
+            <div class="absolute left-4 sm:left-1/2 top-0 bottom-0 w-0.5 bg-stone-200 dark:bg-stone-800 -translate-x-1/2 hidden sm:block"></div>
+            
+            <div class="space-y-6 relative">
+              <!-- 第 3 個月節點 -->
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                <div class="sm:w-[45%] text-left sm:text-right">
+                  <h4 class="font-bold text-stone-800 dark:text-white text-sm">📅 滿 3 個月 (初展身手)</h4>
+                  <p class="text-xs text-stone-500 dark:text-stone-400">平均成果：5.0% 體重</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-brand-light text-brand-dark flex items-center justify-center font-bold text-xs shadow-md z-10 mx-auto hidden sm:flex">3M</div>
+                <div class="sm:w-[45%] text-left bg-brand/15 text-brand-dark dark:text-brand-light text-xs px-3 py-1.5 rounded-lg font-bold">
+                  🌿 穩定率 71.1% (此時鬥志與信心滿滿)
+                </div>
+              </div>
+
+              <!-- 第 6 個月節點 -->
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                <div class="sm:w-[45%] text-left sm:text-right">
+                  <h4 class="font-bold text-coral text-sm">🚨 滿 6 個月 (最需傾聽的關卡)</h4>
+                  <p class="text-xs text-stone-500 dark:text-stone-400">平均成果：7.5% 體重</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-[#d97d4c] text-white flex items-center justify-center font-bold text-xs shadow-md z-10 mx-auto hidden sm:flex relative">
+                  <span class="absolute inset-0 rounded-full bg-coral-dark animate-ping opacity-45"></span>
+                  <span class="relative">6M</span>
+                </div>
+                <div class="sm:w-[45%] text-left bg-coral-light/30 text-coral-dark dark:text-coral-light text-xs px-3 py-1.5 rounded-lg font-bold relative overflow-hidden">
+                  <span class="absolute left-0 top-0 bottom-0 w-1 bg-[#d97d4c]"></span>
+                  ☀️ 穩定率 36.6% (最需要醫療團隊暖心陪伴此階段)
+                </div>
+              </div>
+
+              <!-- 第 9 個月節點 -->
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                <div class="sm:w-[45%] text-left sm:text-right">
+                  <h4 class="font-bold text-stone-800 dark:text-white text-sm">🏆 滿 9-11 個月 (收穫期)</h4>
+                  <p class="text-xs text-stone-500 dark:text-stone-400">平均成果：8.7% 體重</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-brand text-white flex items-center justify-center font-bold text-xs shadow-md z-10 mx-auto hidden sm:flex">9M</div>
+                <div class="sm:w-[45%] text-left bg-brand/15 text-brand dark:text-brand-light text-xs px-3 py-1.5 rounded-lg font-bold">
+                  ✨ 穩定率 24.3% (體態與習慣均已完美重塑)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-400 rounded-xl text-xs space-y-1 border border-stone-200 dark:border-stone-800">
+            <span class="font-bold text-coral-dark dark:text-coral-light flex items-center gap-1.5">☘️ 悄悄告訴你的通關秘訣：</span>
+            在剛起跑的第 3～4 個月，提前預約好下一次的陪伴門診，或是設定手機日曆提醒——這是數據悄悄透露、成功率翻倍的幸福小習慣！
+          </div>
+        </div>
+
+        <!-- 再玩一次與次佳路線 -->
+        <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 shadow-md shadow-stone-300/10 dark:shadow-none text-center space-y-4 backdrop-blur">
+          <div id="r-runner" class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed text-left"></div>
+          
+          <button onclick="restart()" class="w-full py-3.5 px-6 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-white font-bold rounded-xl transition-all duration-150">
+            🔄 重啟冒險，測試不同方向
+          </button>
+
+          <p class="text-[11px] text-stone-400 dark:text-stone-500 leading-relaxed max-w-lg mx-auto">
+            本遊戲依據高榮代謝減重中心 2026 年 6 月之匿名彙整統計學數據設計。任何藥物皆有其適應與禁忌症，最合適您的專屬配置，請依醫師專業門診評估為準。
+          </p>
+        </div>
+      </div>
+
+      <!-- 頁尾 -->
+      <footer class="mt-12 text-center text-[11px] text-stone-400 dark:text-stone-500 space-y-1">
+        <div>高榮代謝減重中心 ｜ 數據追蹤期間 2025/09 – 2026/06</div>
+        <div>專案來源：減重門診月度成效統計與匿名追蹤報告 (2026-07)</div>
+      </footer>
+
     </div>
   </div>
 
-  <!-- ═══ 問題畫面 ═══ -->
-  <div class="screen" id="scr-quiz">
-    <div class="progress">
-      <div class="track"><div class="fill" id="prog-fill"></div></div>
-      <span class="step" id="prog-step"></span>
-    </div>
-    <div class="card">
-      <div class="fact" id="q-fact" style="display:none"></div>
-      <div class="q-title" id="q-title"></div>
-      <div class="q-sub" id="q-sub"></div>
-      <div id="q-opts"></div>
-      <button class="btn primary" id="q-confirm" style="display:none" onclick="confirmMulti()">確定，前往下一關 →</button>
-    </div>
-  </div>
+  <script>
+    const DRUGS = [
+      { key: 'mounjaro', name: 'Mounjaro 雙重腸泌素', n: 129, avg: 7.0, rng: '(-21.1, 4)' },
+      { key: 'combo',    name: '併用／轉換兩種方式', n: 55, avg: 5.3, rng: '(-18.5, 18.7)' },
+      { key: 'ozempic',  name: 'Ozempic 週打針劑',  n: 84,  avg: 4.7, rng: '(-21.6, 7.3)' },
+      { key: 'contrave', name: 'Contrave 康纖芙口服', n: 61,  avg: 4.0, rng: '(-23.4, 9.3)' },
+      { key: 'wegovy',   name: 'Wegovy 減重針劑',   n: 33,  avg: 3.8, rng: '(-13.6, 1.1)' },
+      { key: 'rybelsus', name: 'Rybelsus 瑞倍適口服', n: 22, avg: 3.3, rng: '(-8.7, 0)' },
+      { key: 'none',     name: '純生活型態改造 (無用藥)', n: 295, avg: 2.5, rng: '(-27.5, 3.9)' },
+      { key: 'xenical',  name: 'Xenical 羅氏鮮口服',  n: 39,  avg: 2.3, rng: '(-12.3, 1.3)' },
+    ];
 
-  <!-- ═══ 結果畫面 ═══ -->
-  <div class="screen" id="scr-result">
-    <div class="result-hero" id="r-hero"></div>
-    <div class="card">
-      <h3 class="sec">🏅 走這條路的前輩戰績（本院實際數據）</h3>
-      <div class="stats" id="r-stats"></div>
-      <div id="r-desc" style="margin-top:14px; font-size:.95em"></div>
-    </div>
-    <div class="card">
-      <h3 class="sec">📊 各路線平均減重比一比（kg）</h3>
-      <div class="bars" id="r-bars"></div>
-      <p class="bar-note">資料：本院個案追蹤檔 768 筆（2026-07-10 修正併用/轉換歸類後數字），藍色為你的推薦路線。Saxenda 單獨使用僅 8 人、樣本過小不列入比較。</p>
-    </div>
-    <div class="card" id="r-tips-card">
-      <h3 class="sec">🎯 給你的個人化情報</h3>
-      <div id="r-tips"></div>
-    </div>
-    <div class="boss">
-      <h3>👹 最終 Boss：第 3～6 個月流失斷層</h3>
-      <p style="font-size:.93em">不管你選哪條路線，全體冒險者共同的最終 Boss 都是「<b>撐過第 6 個月</b>」。本院數據顯示，回診者從滿 3 個月的 71% 驟降到滿 6 個月的 37%——但撐過去的人，平均減重跨過 <b>5% 臨床意義門檻</b>，9–11 個月更達 8.7% 高峰。</p>
-      <table>
-        <tr><th>追蹤時長</th><th>滿3個月</th><th>滿6個月</th><th>滿9個月</th><th>滿12個月</th></tr>
-        <tr><td>回診者留存</td><td>71.1%</td><td>36.6%</td><td>24.3%</td><td>17.4%</td></tr>
-        <tr><td>平均減重%</td><td>5.0%</td><td>7.5%</td><td>8.7%</td><td>8.0%</td></tr>
-      </table>
-      <p style="font-size:.9em; margin-top:8px">⚔️ <b>攻略祕笈</b>：在第 3～4 個月就先把回診預約掛好、設好提醒——這是數據認證的勝負關鍵時點。</p>
-    </div>
-    <div class="card">
-      <div class="runner" id="r-runner"></div>
-      <button class="btn primary" onclick="restart()">🔄 再玩一次</button>
-      <p class="disclaimer">本遊戲依據高榮代謝減重中心 2026 年 6 月月度成效分析之匿名彙總統計設計，僅供衛教參考。藥物皆有適應症、禁忌症與副作用，且各方案費用不同，實際治療請與醫師討論後決定。</p>
-    </div>
-  </div>
+    const ROUTES = {
+      lifestyle: {
+        em: '🥗', name: '生活型態改造路線',
+        tag: '大自然的長跑引擎——溫和累積，拉長戰線後成效不輸給科技！',
+        hl: ['none'],
+        stats: [ ['295 人', '並行旅程的夥伴數'], ['-2.5 kg', '平均體態調減'], ['7.3%', '滿12個月平均調減%'] ],
+        desc: '這條路線最大的秘密武器就是「溫和的耐心」。追蹤前 3-5 個月時可能身形改變輕微（約 1.8%），但只要能與營養師攜手前進滿 12 個月，平均可收穫高達 <b>7.3%</b> 的體態改變！這是一條最省荷包、無藥物副作用的天然路線。',
+      },
+      oral: {
+        em: '💊', name: '溫和口服輔助路線',
+        tag: '日常習慣的溫和神助手——適合排斥指尖針頭的你',
+        hl: ['contrave', 'rybelsus', 'xenical'],
+        stats: [ ['122 人', '選擇口服的同伴'], ['-4.0 kg', 'Contrave 平均成效'], ['-3.3 kg', 'Rybelsus 平均成效'] ],
+        desc: '不喜歡挨針嗎？口服方案中，<b>Contrave (康纖芙)</b> 能幫助大腦更輕鬆地面對美食渴望，61 位夥伴平均減少 4.0 kg；而 <b>Rybelsus (瑞倍適)</b> 口服 GLP-1 則帶來 3.3 kg 的進展。對於踏出第一步的夥伴，是極佳的友善跳板。',
+      },
+      glp1: {
+        em: '💉', name: '經典 GLP-1 穩定生活路線',
+        tag: '當前最受歡迎的穩定方案——平滑舒緩食慾，每週輕鬆一次',
+        hl: ['ozempic', 'wegovy'],
+        stats: [ ['117 人', '週打針劑夥伴總數'], ['-4.7 kg', 'Ozempic 平均成效'], ['8.2%', '半年時的平均成果'] ],
+        desc: '本方案是目前健康生活型態的主力輔助之一。經典 <b>Ozempic (胰妥讚)</b> 84 位夥伴平均減少 4.7 kg。一週只需使用一次，能大幅降低因生活壓力帶來的焦慮進食，為你建立輕鬆的生活防護罩。',
+      },
+      mounjaro: {
+        em: '⚡', name: 'Mounjaro 雙效進階代謝路線',
+        tag: '本院追蹤數據榜首——雙重受體效應，釋放細胞潛能！',
+        hl: ['mounjaro'],
+        stats: [ ['129 人', '本院高人氣個案數'], ['-7.0 kg', '全院最佳平均進展'], ['10.8%', '6-8 個月追蹤表現'] ],
+        desc: '<b>Mounjaro 憑藉先進的雙重受體，是本院實測的成果焦點：</b>平均減少達 -7.0 kg！追蹤半年的夥伴更可見高達 10.8% 的身形變化。雖然預算要求高，但對卡關已久、且極度期待打破現狀的進階冒險者來說，是一帖強力的破關處方。',
+      },
+      surgery: {
+        em: '🏥', name: '多學科代謝團隊關懷路線',
+        tag: '重塑未來的終極里程碑——由多學科專家溫馨陪伴評估',
+        hl: ['mounjaro', 'combo'],
+        stats: [ ['11 人', '已開展評估的同伴'], ['BMI > 35', '或 > 30 伴隨健康課題'], ['多專科', '外科、營養、身心共同守護'] ],
+        desc: '您的各項健康指數顯示，代謝評估會是最負責任的起點。這是一個影響深遠的健康里程碑。在完整評估的過程中，一般團隊會先以 <b>Mounjaro 等先進調整工具 (平均減少 7.0 kg) 配合營養師的引導，幫你的身心和代謝打下最溫和安穩的健康基礎。</b>',
+      },
+    };
 
-  <footer>高榮代謝減重中心｜資料期間 2025/09–2026/06｜數據來源：減重門診月度分析報告</footer>
-</div>
+    const QUESTIONS = [
+      { id: 'bmi', title: '第 1 關：你的 BMI 屬於哪一個溫馨級別？', sub: '身體質量指數 (BMI) = 體重 (kg) / 身高² (m²)',
+        opts: [ ['🌱', '24 以下（體重正常，但腰圍或體脂偏高）', '<24'], ['🙂', '24 – 27（稍稍豐腴，有進步空間）', '24-27'], ['😯', '27 – 30（輕度負擔，需要溫和防護）', '27-30'], ['😰', '30 – 35（中度負擔，需要專業引導）', '30-35'], ['🆘', '35 以上（身心感到沉重，需要傾力守護）', '>35'] ],
+        fact: '📊 門診小情報：在求診的夥伴中，其實有 65% 的人 BMI 也是大於 30，所以你並不孤單，我們在這裡陪著你！' },
+      { id: 'age', title: '第 2 關：你的年齡層是？', sub: '不同階段的身心靈，有最合適的陪伴步調',
+        opts: [ ['🧒', '30 歲以下（新陳代謝如春陽般旺盛）', '<30'], ['🧑', '30 – 39 歲（黃金巔峰期）', '30-39'], ['🧔', '40 – 49 歲（成熟穩重期）', '40-49'], ['👨‍🦳', '50 – 59 歲（保養滋潤期）', '50-59'], ['👴', '60 歲以上（養生溫和重於激烈改變）', '60+'] ],
+        fact: '📊 門診小情報：30–39 歲是門診最活潑的主力夥伴群，也是最願意嘗試新型健康方案的一群喔。' },
+      { id: 'comorbid', title: '第 3 關：目前你有被檢驗出以下健康狀況嗎？', sub: '可複選，確認選完後請點擊下方「確定」按鈕', multi: true,
+        opts: [ ['🍬', '血糖稍微偏高或糖尿病', 'dm'], ['🫀', '血壓高高低低', 'htn'], ['🩸', '膽固醇或血脂稍微超標', 'lipid'], ['🫁', '打呼很大聲或呼吸不順暢', 'osa'], ['🟡', '脂肪肝小斑塊', 'fl'], ['🌸', '多囊性卵巢', 'pcos'], ['🙅', '目前身體都非常放鬆、無上述狀況', 'none'] ],
+        fact: '📊 門診小情報：血糖與血脂是最常見的伴隨特徵。研究顯示減重 5–10%，就有機會明顯改善血糖、血脂與脂肪肝指標！' },
+      { id: 'exp', title: '第 4 關：過去的體態旅程經驗？', sub: '這能幫助我們了解你身體的適應力',
+        opts: [ ['🐣', '新進冒險家：這是人生第一次認真著手規劃', 'first'], ['🔄', '重整出發者：曾有成效，但因生活繁忙有些許回彈', 'rebound'], ['⚔️', '資深抗戰家：嘗試過許多方法，希望能找到持久答案', 'veteran'] ],
+        fact: '📊 門診小情報：本院最新一期的新增夥伴中，高達 88% 都有過去減重經驗。以前的波動只是身體的自我保護機制，不是你的錯喔！' },
+      { id: 'budget', title: '第 5 關：每月能為這趟健康旅程撥出多少預算呢？', sub: '這會引導最適合你的科技方案配置',
+        opts: [ ['🪙', '1,000 元以下 (期待完全靠飲食與自然律動調整)', 'b0'], ['💵', '1,000 – 4,500 元 (能接受常規口服輔助)', 'b1'], ['💶', '4,500 – 8,000 元 (考慮經典型一週一次針劑)', 'b2'], ['💰', '8,000 – 15,000 元 (期望採用最新高效率配方)', 'b3'], ['👑', '希望以效果和健康改善為最優先，甚至考慮手術方案', 'b4'] ],
+        fact: '📊 門診小情報：預算規劃與每個人內心對體態的急迫感、健康需求程度息息相關，選擇自己最自在的配置就好！' },
+      { id: 'inject', title: '第 6 關：對於「每週一次、微細針頭皮下呵護」的看法？', sub: '現行高效率的調整方案多為每週一次的微型精緻工具',
+        opts: [ ['💉', '完全沒問題！一週一次比每天吞藥輕鬆多了', 'ok'], ['💊', '稍微抗拒針頭，希望完全以口服為主', 'oral'], ['🎯', '都不排斥！只要安全、能幫我建立習慣我都願意試', 'any'] ],
+        fact: '📊 門診小情報：本院使用藥物的夥伴中，約六成選擇 GLP-1 類方案（含口服），是目前的主流選擇。' },
+      { id: 'style', title: '最終關：你最期待以什麼風格與團隊並肩？', sub: '這決定了我們的支援戰術',
+        opts: [ ['🥗', '自主旅跑：我想全力自我挑戰，工具純粹是第二防線', 'diy'], ['🤝', '溫柔聯手：需要工具幫忙建立屏障，我再慢慢調整腳步', 'assist'], ['🔥', '全面加速：我準備好了，工具和飲食習慣調整全力推進', 'max'] ],
+        fact: '📊 門診小情報：數據證明，不論選哪一條路線，只要「穩定回診不神隱」，習慣就能深耕，這才是最大的Buff！' }
+    ];
 
-<script>
-// ── 本院真實彙總數據（2026_06 報告）──
-const DRUGS = [
-  { key:'mounjaro', name:'Mounjaro', n:129, avg:7.0, rng:'(-21.1, 4)' },
-  { key:'combo',    name:'併用／轉換兩種', n:55, avg:5.3, rng:'(-18.5, 18.7)' },
-  { key:'ozempic',  name:'Ozempic',  n:84,  avg:4.7, rng:'(-21.6, 7.3)' },
-  { key:'contrave', name:'Contrave', n:61,  avg:4.0, rng:'(-23.4, 9.3)' },
-  { key:'wegovy',   name:'Wegovy',   n:33,  avg:3.8, rng:'(-13.6, 1.1)' },
-  { key:'rybelsus', name:'Rybelsus（口服）', n:22, avg:3.3, rng:'(-8.7, 0)' },
-  { key:'none',     name:'無用藥／生活型態', n:295, avg:2.5, rng:'(-27.5, 3.9)' },
-  { key:'xenical',  name:'Xenical',  n:39,  avg:2.3, rng:'(-12.3, 1.3)' },
-]; // Saxenda 單獨使用僅 8 人（可評估 5 人）且半數未回診，樣本過小不列入比較圖
+    function computeScores(a) {
+      const s = { lifestyle: 0, oral: 0, glp1: 0, mounjaro: 0, surgery: 0 };
+      const co = a.comorbid;
+      const hasDM = co.includes('dm');
+      const coCount = co.filter(x => x !== 'none').length;
 
-const ROUTES = {
-  lifestyle: {
-    em:'🥗', name:'生活型態改造路線',
-    tag:'慢熱型引擎——起步不快，但拉長戰線後成效穩穩追上來',
-    hl:['none'],
-    stats:[ ['295 人','本院同路線個案數'], ['-2.5 kg','平均減重（-27.5, 3.9）'], ['7.3%','追蹤滿12個月平均減重%'] ],
-    desc:'本院無用藥組的祕密武器是「時間」：追蹤 3–5 個月時平均只減 1.8%，但堅持到 12 個月以上的前輩平均減了 <b>7.3%</b>——已逼近藥物組的水準。搭配營養師飲食調整與規律運動，這條路線最省錢、副作用最少，唯一的敵人是半途而廢。',
-  },
-  oral: {
-    em:'💊', name:'口服藥物起步路線',
-    tag:'不用打針也能開外掛——口服藥搭配生活調整',
-    hl:['contrave','rybelsus','xenical'],
-    stats:[ ['122 人','本院口服藥個案（Contrave+Rybelsus+Xenical）'], ['-4.0 kg','Contrave 平均減重'], ['-3.3 kg','Rybelsus（口服GLP-1）平均減重'] ],
-    desc:'不想打針？本院口服選項中 <b>Contrave</b>（食慾與渴望控制，61 人平均 -4.0 kg）與 <b>Rybelsus</b>（口服 GLP-1，22 人平均 -3.3 kg）表現不俗；Xenical（39 人，-2.3 kg）則適合外食油脂多的族群。口服路線費用中等、進入門檻低，是從生活型態升級的第一站。',
-  },
-  glp1: {
-    em:'💉', name:'GLP-1 針劑路線',
-    tag:'主流王道——食慾控制＋代謝改善，一週一針',
-    hl:['ozempic','wegovy'],
-    stats:[ ['117 人','本院 GLP-1 週打個案（Ozempic＋Wegovy）'], ['-4.7 kg','Ozempic 平均減重（-21.6, 7.3）'], ['8.2%','Ozempic 追蹤6-8個月平均減重%'] ],
-    desc:'GLP-1 類是本院用藥主力（含口服與雙重腸泌素合計約 276 人、約佔用藥個案六成）。<b>Ozempic</b>（84 人，平均 -4.7 kg）追蹤 6–8 個月平均減 8.2%；<b>Wegovy</b>（33 人，-3.8 kg）為減重專用適應症。一週一針、食慾明顯下降，是效果與費用之間的均衡選擇。若合併糖尿病，還能與血糖治療整合。（每日注射的 Saxenda 本院單獨使用僅 8 人、半數未回診，樣本過小不列入推薦。）',
-  },
-  mounjaro: {
-    em:'⚡', name:'Mounjaro 進階代謝路線',
-    tag:'本院成效榜首——雙重腸泌素的火力全開',
-    hl:['mounjaro'],
-    stats:[ ['129 人','本院 Mounjaro 個案數'], ['-7.0 kg','平均減重（-21.1, 4）★全院最佳'], ['10.8%','追蹤6-8個月平均減重%'] ],
-    desc:'<b>Mounjaro（雙重腸泌素 GIP/GLP-1）是本院 129 人實測的成效冠軍</b>：平均 -7.0 kg，追蹤 6–8 個月平均減 <b>10.8%</b>——跨進「≥10% 顯著臨床效益」等級，9–11 個月更達 16.3%（樣本小，僅供參考）。費用較高（多落在月付 8000 元以上的區間），適合中重度肥胖、有共病、或已嘗試多種方式仍卡關的冒險者。',
-  },
-  surgery: {
-    em:'🏥', name:'代謝手術評估路線',
-    tag:'終極大招——先評估，由多專科團隊陪你決定',
-    hl:['mounjaro','combo'],
-    stats:[ ['11 人','本院手術評估／轉介個案'], ['BMI>35','或 30–35 合併代謝疾病為評估對象'], ['多專科','外科＋代謝科＋營養＋心理共同評估'] ],
-    desc:'你的 BMI 與共病狀況已達代謝手術的評估範圍。手術是目前長期減重幅度最大的治療，但屬重大醫療決策，需先經完整的多專科評估（本院現有 11 位評估／轉介個案）。<b>評估期間通常會先以藥物（如 Mounjaro，本院平均 -7.0 kg）搭配生活型態打底</b>——先開一段藥物副本練等，再決定是否挑戰終極大招。',
-  },
-};
+      const bmiScores = {
+        '<24':   () => { s.lifestyle += 3;   s.oral += 1; },
+        '24-27': () => { s.lifestyle += 2.5; s.oral += 1.5; },
+        '27-30': () => { s.oral += 2; s.glp1 += 1.5; s.lifestyle += 1; },
+        '30-35': () => { s.glp1 += 2; s.mounjaro += 2; s.oral += 1; },
+        '>35':   () => { s.mounjaro += 2.5; s.surgery += 2; s.glp1 += 1.5; }
+      };
+      if (bmiScores[a.bmi]) bmiScores[a.bmi]();
 
-// ── 七道關卡 ──
-const QUESTIONS = [
-  { id:'bmi', title:'第 1 關：你的 BMI 落在哪個區間？', sub:'BMI = 體重(kg) ÷ 身高(m)²',
-    opts:[ ['🌱','24 以下（但腰圍超標或體脂偏高）','<24'], ['🙂','24 – 27（過重）','24-27'], ['😯','27 – 30（輕度肥胖）','27-30'], ['😰','30 – 35（中度肥胖）','30-35'], ['🆘','35 以上（重度肥胖）','>35'] ],
-    fact:'📊 門診冷知識：本院求診者 65% 是 BMI≥30 的中重度肥胖——你並不孤單。' },
-  { id:'age', title:'第 2 關：你的年齡層是？', sub:'',
-    opts:[ ['🧒','30 歲以下','<30'], ['🧑','30 – 39 歲','30-39'], ['🧔','40 – 49 歲','40-49'], ['👨‍🦳','50 – 59 歲','50-59'], ['👴','60 歲以上','60+'] ],
-    fact:'📊 門診冷知識：30–39 歲是本院最大族群（94/317 人），也是費用意願最高的一群（51% 願月付 8000 元以上）。' },
-  { id:'comorbid', title:'第 3 關：你有下列哪些健康狀況？', sub:'可複選，選完按「確定」', multi:true,
-    opts:[ ['🍬','糖尿病或糖尿病前期','dm'], ['🫀','高血壓','htn'], ['🩸','高血脂','lipid'], ['🫁','睡眠呼吸中止／打鼾嚴重','osa'], ['🟡','脂肪肝','fl'], ['🌸','多囊性卵巢','pcos'], ['🙅','以上皆無','none'] ],
-    fact:'📊 門診冷知識：糖尿病／前期是本院最常見共病（116/317 人）；減重 5–10% 就能明顯改善血糖與脂肪肝。' },
-  { id:'exp', title:'第 4 關：你的減重冒險資歷？', sub:'',
-    opts:[ ['🐣','新手村：第一次認真減重','first'], ['🔄','轉生者：試過 1–2 次，減了又復胖','rebound'], ['⚔️','老兵：多次嘗試，什麼方法都試過了','veteran'] ],
-    fact:'📊 門診冷知識：本院最新一批求診者 88% 都有過去減重經驗——復胖不是你的錯，是工具還沒選對。' },
-  { id:'budget', title:'第 5 關：每月願意投資多少在減重治療？', sub:'與本院評估問卷相同的費用區間',
-    opts:[ ['🪙','1,000 元以下','b0'], ['💵','1,000 – 4,500 元','b1'], ['💶','4,500 – 8,000 元','b2'], ['💰','8,000 – 15,000 元','b3'], ['👑','不設上限，甚至考慮手術','b4'] ],
-    fact:'📊 門診冷知識：本院 41% 的求診者願意月付 8,000 元以上——高費用意願與 BMI、年齡呈正相關。' },
-  { id:'inject', title:'第 6 關：對「打針」的接受度？', sub:'目前最有效的減重藥多為每週一次皮下注射',
-    opts:[ ['💉','完全 OK，一週一針小意思','ok'], ['💊','希望以口服為主，盡量不打針','oral'], ['🎯','都可以，效果優先','any'] ],
-    fact:'📊 門診冷知識：GLP-1 類藥物（含口服）合計 282 人使用，佔本院用藥個案的 61%，是絕對主流。' },
-  { id:'style', title:'最終關：你想怎麼打這場仗？', sub:'',
-    opts:[ ['🥗','靠自己：大改飲食＋規律運動，我做得到','diy'], ['🤝','助攻型：需要藥物幫忙壓食慾，才撐得住','assist'], ['🔥','全力輸出：藥物＋生活型態組合拳，給我最有效的','max'] ],
-    fact:'📊 門診冷知識：無用藥組堅持滿 12 個月平均也能減 7.3%——任何路線，「留下來」都是最強 buff。' },
-];
+      if (co.includes('none')) s.lifestyle += 1.5;
+      if (hasDM) { s.glp1 += 1.5; s.mounjaro += 1.5; }
+      if (coCount >= 2) { s.mounjaro += 1; s.glp1 += 0.5; }
+      if (co.includes('osa')) s.mounjaro += 0.5;
 
-// ── 計分引擎 ──
-function computeScores(a) {
-  const s = { lifestyle:0, oral:0, glp1:0, mounjaro:0, surgery:0 };
-  const co = a.comorbid;
-  const hasDM = co.includes('dm');
-  const coCount = co.filter(x => x !== 'none').length;
+      const expScores = {
+        first:   () => { s.lifestyle += 2; s.oral += 1; },
+        rebound: () => { s.oral += 1; s.glp1 += 1.5; },
+        veteran: () => { s.mounjaro += 2; s.glp1 += 1; s.surgery += 0.5; }
+      };
+      if (expScores[a.exp]) expScores[a.exp]();
 
-  ({ '<24':   () => { s.lifestyle+=3;   s.oral+=1; },
-     '24-27': () => { s.lifestyle+=2.5; s.oral+=1.5; },
-     '27-30': () => { s.oral+=2; s.glp1+=1.5; s.lifestyle+=1; },
-     '30-35': () => { s.glp1+=2; s.mounjaro+=2; s.oral+=1; },
-     '>35':   () => { s.mounjaro+=2.5; s.surgery+=2; s.glp1+=1.5; } })[a.bmi]();
+      const budgetScores = {
+        b0: () => { s.lifestyle += 3.5; s.oral += 0.5; s.glp1 -= 12; s.mounjaro -= 15; s.surgery -= 15; },
+        b1: () => { s.oral += 3; s.lifestyle += 1.5; s.glp1 -= 6; s.mounjaro -= 12; s.surgery -= 10; },
+        b2: () => { s.glp1 += 3; s.oral += 1.5; s.mounjaro -= 3; s.surgery -= 5; },
+        b3: () => { s.mounjaro += 3.5; s.glp1 += 2; },
+        b4: () => { s.mounjaro += 2.5; s.glp1 += 1; s.surgery += 3.5; }
+      };
+      if (budgetScores[a.budget]) budgetScores[a.budget]();
 
-  if (co.includes('none')) s.lifestyle += 1.5;
-  if (hasDM) { s.glp1 += 1.5; s.mounjaro += 1.5; }
-  if (coCount >= 2) { s.mounjaro += 1; s.glp1 += 0.5; }
-  if (co.includes('osa')) s.mounjaro += 0.5;
+      const injectScores = {
+        oral: () => { s.oral += 3.5; s.lifestyle += 1.5; s.glp1 -= 12; s.mounjaro -= 12; },
+        ok:   () => { s.glp1 += 1.5; s.mounjaro += 2; },
+        any:  () => { s.glp1 += 1.2; s.mounjaro += 1.5; }
+      };
+      if (injectScores[a.inject]) injectScores[a.inject]();
 
-  ({ first:   () => { s.lifestyle+=2; s.oral+=1; },
-     rebound: () => { s.oral+=1; s.glp1+=1.5; },
-     veteran: () => { s.mounjaro+=2; s.glp1+=1; s.surgery+=1; } })[a.exp]();
+      const styleScores = {
+        diy:    () => { s.lifestyle += 3; },
+        assist: () => { s.oral += 1.5; s.glp1 += 1.2; },
+        max:    () => { s.mounjaro += 2; s.glp1 += 0.8; }
+      };
+      if (styleScores[a.style]) styleScores[a.style]();
 
-  ({ b0: () => { s.lifestyle+=3; s.oral+=0.5; s.glp1-=10; s.mounjaro-=10; s.surgery-=10; },
-     b1: () => { s.oral+=2.5; s.lifestyle+=1.5; s.glp1-=6; s.mounjaro-=10; s.surgery-=6; },
-     b2: () => { s.glp1+=2.5; s.oral+=1.5; s.mounjaro-=2; s.surgery-=4; },
-     b3: () => { s.mounjaro+=3; s.glp1+=1.5; },
-     b4: () => { s.mounjaro+=2; s.glp1+=1; s.surgery+=2.5; } })[a.budget]();
+      const surgeryEligible = (a.bmi === '>35') || (a.bmi === '30-35' && hasDM);
+      if (!surgeryEligible || a.budget !== 'b4') {
+        s.surgery = -99;
+      } else {
+        s.surgery += 4 + (coCount * 1.5);
+      }
 
-  ({ oral: () => { s.oral+=2; s.lifestyle+=1; s.glp1-=10; s.mounjaro-=10; },
-     ok:   () => { s.glp1+=1.5; s.mounjaro+=1.5; },
-     any:  () => { s.glp1+=1;   s.mounjaro+=1; } })[a.inject]();
+      return s;
+    }
 
-  ({ diy:    () => { s.lifestyle+=2.5; },
-     assist: () => { s.oral+=1.5; s.glp1+=1; },
-     max:    () => { s.mounjaro+=1.5; s.glp1+=0.5; } })[a.style]();
+    const ROUTE_NAMES = {
+      lifestyle: '生活型態改造',
+      oral: '口服藥物起步',
+      glp1: 'GLP-1 針劑主流',
+      mounjaro: 'Mounjaro 進階代謝',
+      surgery: '代謝手術評估'
+    };
 
-  // 手術路線門檻：BMI>35，或 30–35 合併糖尿病；且需玩家自選「考慮手術」
-  const surgeryEligible = a.bmi === '>35' || (a.bmi === '30-35' && hasDM);
-  if (!surgeryEligible || a.budget !== 'b4') s.surgery = -99;
-  else s.surgery += 3 + 1.5 * coCount; // 明確表態考慮手術＋共病越重，手術評估優先度越高
+    function personalTips(a, winner) {
+      const t = [];
+      if (a.age === '<30') {
+        t.push(['⚠️', '年輕的夥伴通常生活節奏快，我們門診發現 30 歲以下夥伴的「未回診率」稍高（約 42.9%）。別擔心！建議你剛開始時，就把預定日寫在最常用的日曆 App 上，這是一個極度有效的小秘密。']);
+      }
+      if (a.age === '60+') {
+        t.push(['🌟', '我們發現 60 歲以上的長輩，是門診中最細心也最穩定的模範生（流失率僅 29.8%）！這種扎實的步調，是成效最棒的催化劑，你擁有非常棒的天生優勢！']);
+      }
+      if (a.comorbid.includes('dm')) {
+        t.push(['🍬', '面對血糖波動，我們正與你並肩。新型輔助方案能在穩固血糖的同時，優雅地梳理體態。這是一項非常划算的身心健康雙重投資。']);
+      }
+      if (a.comorbid.includes('osa')) {
+        t.push(['🫁', '打鼾聲與夜間缺氧，常在體脂稍微調整 5-10% 時，就能獲得出乎意料的寧靜與通暢。這會讓你在清晨醒來時，感受到久違的清爽！']);
+      }
+      if (a.comorbid.includes('pcos')) {
+        t.push(['🌸', '多囊性的調皮往往與體內代謝的節奏有關。有時候，稍微釋放身體的累積負擔，就能讓體內的荷爾蒙韻律重新變得溫柔而規律。']);
+      }
+      if (a.exp === 'veteran') {
+        t.push(['⚔️', '以前曾卡關的經驗絕不是失敗，而是極具參考價值的「身心數據」。看診時不妨主動告訴醫師，過去哪些調控方式讓你感覺最舒服、最沒有壓力，能少走很多彎路！']);
+      }
+      if (a.inject === 'oral' && (a.bmi === '30-35' || a.bmi === '>35')) {
+        t.push(['💡', '若未來習慣漸漸養成、遇到瓶頸時，Rybelsus 這類口服 GLP-1 藥物（本院夥伴實測平均減少 3.3kg），會是不用打針又極具質感的升級折衷選項。']);
+      }
+      if (winner === 'lifestyle') {
+        t.push(['📅', '自主自然路線就像是一場長途散步。前 3 個月身心在適應，進度看似平緩，但只要與我們同行撐過 12 個月，那份堅持會為你帶來高達 7.3% 的驚艷回饋！']);
+      }
+      t.push(['🗓️', '所有冒險者共通密技：第 3 到第 4 個月是心靈最容易懈怠的生理週期。在這個時段預約好下一次的陪伴門診，減重勝率立刻提高一倍。']);
+      return t;
+    }
 
-  return s;
-}
+    let qIndex = 0;
+    const answers = {};
+    let multiSel = new Set();
 
-const ROUTE_NAMES = { lifestyle:'生活型態改造', oral:'口服藥物起步', glp1:'GLP-1 針劑', mounjaro:'Mounjaro 進階代謝', surgery:'代謝手術評估' };
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.add('hidden');
+        s.classList.remove('fade-up-active');
+      });
+      const target = document.getElementById(id);
+      target.classList.remove('hidden');
+      void target.offsetWidth;
+      target.classList.add('fade-up-active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-function personalTips(a, winner) {
-  const t = [];
-  if (a.age === '<30') t.push(['⚠️','本院 30 歲以下的未回診率最高（42.9%）——你這個年齡層最容易「消失」。建議一開始就綁定 LINE 提醒或線上預約，把回診自動化。']);
-  if (a.age === '60+') t.push(['🌟','60 歲以上是本院回診最穩定的族群（未回診率僅 29.8%）——穩定回診正是成效最強的預測因子，這是你的天生優勢。']);
-  if (a.comorbid.includes('dm')) t.push(['🍬','你有糖尿病／前期：GLP-1 或 Jardiance 類藥物可與血糖治療整合，一箭雙鵰。本院糖尿病＋高血脂共病組合多達 56 人，是最常見的高風險組合。']);
-  if (a.comorbid.includes('osa')) t.push(['🫁','睡眠呼吸中止＋肥胖是本院男性的招牌組合（高血壓＋OSA 個案 93% 為男性）。減重 5–10% 即可明顯改善呼吸中止與白天嗜睡。']);
-  if (a.comorbid.includes('pcos')) t.push(['🌸','多囊性卵巢與胰島素阻抗高度相關，減重 5% 就可能改善排卵與經期——體重是你最好的內分泌處方。']);
-  if (a.exp === 'veteran') t.push(['⚔️','多次減重經驗不是失敗紀錄，是情報資產。本院最新求診者 88% 都和你一樣——把過去「哪個方法撐最久」告訴醫師，比從零開始快得多。']);
-  if (a.inject === 'oral' && (a.bmi === '30-35' || a.bmi === '>35')) t.push(['💡','若日後想升級戰力：口服 Rybelsus 是不用打針的 GLP-1（本院 22 人，平均 -3.3 kg），可作為口服與針劑之間的橋樑。']);
-  if (winner === 'lifestyle') t.push(['📅','無用藥路線的成敗全在「續航」：3–5 個月平均只減 1.8%，滿 12 個月卻有 7.3%。先預約好 3 個月後的回診，勝率立刻上升。']);
-  t.push(['🗓️','所有路線共通：第 3～4 個月就把下一次回診掛好。這是本院數據找出的黃金介入時點。']);
-  return t;
-}
+    function startGame() {
+      qIndex = 0;
+      Object.keys(answers).forEach(k => delete answers[k]);
+      renderQ();
+      showScreen('scr-quiz');
+    }
 
-// ── 遊戲流程 ──
-let qIndex = 0;
-const answers = {};
-let multiSel = new Set();
+    function restart() {
+      showScreen('scr-start');
+    }
 
-function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('on')); document.getElementById(id).classList.add('on'); window.scrollTo({ top:0, behavior:'smooth' }); }
-function startGame() { qIndex = 0; Object.keys(answers).forEach(k => delete answers[k]); renderQ(); show('scr-quiz'); }
-function restart() { show('scr-start'); }
+    function renderQ() {
+      const q = QUESTIONS[qIndex];
+      
+      const progressPercent = (qIndex / QUESTIONS.length) * 100;
+      document.getElementById('prog-fill').style.width = progressPercent + '%';
+      document.getElementById('prog-step').textContent = `第 ${qIndex + 1} / ${QUESTIONS.length} 關`;
 
-function renderQ() {
-  const q = QUESTIONS[qIndex];
-  document.getElementById('prog-fill').style.width = (qIndex / QUESTIONS.length * 100) + '%';
-  document.getElementById('prog-step').textContent = `第 ${qIndex+1} / ${QUESTIONS.length} 關`;
-  const factEl = document.getElementById('q-fact');
-  if (qIndex > 0) { factEl.style.display = 'block'; factEl.textContent = QUESTIONS[qIndex-1].fact; } else factEl.style.display = 'none';
-  document.getElementById('q-title').textContent = q.title;
-  document.getElementById('q-sub').textContent = q.sub;
-  const box = document.getElementById('q-opts'); box.innerHTML = '';
-  multiSel = new Set();
-  q.opts.forEach(([em, label, val]) => {
-    const b = document.createElement('button');
-    b.className = 'btn';
-    b.innerHTML = (q.multi ? '<span class="chk">☐</span>' : '') + `<span class="em">${em}</span>${label}`;
-    b.onclick = () => q.multi ? toggleMulti(b, val) : answer(q.id, val);
-    box.appendChild(b);
-  });
-  document.getElementById('q-confirm').style.display = q.multi ? 'block' : 'none';
-}
+      const runner = document.getElementById('prog-runner');
+      if (runner) {
+        const explorerEmojis = ['🚶‍♂️', '🚶‍♂️', '🏃‍♂️', '🏃‍♂️', '🧗‍♂️', '🧗‍♂️', '🚴‍♂️'];
+        runner.textContent = explorerEmojis[qIndex] || '🏆';
+      }
 
-function toggleMulti(btn, val) {
-  if (val === 'none') { multiSel.clear(); multiSel.add('none'); document.querySelectorAll('#q-opts .btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); syncChecks(); return; }
-  multiSel.delete('none');
-  document.querySelectorAll('#q-opts .btn').forEach(b => { if (b.textContent.includes('以上皆無')) b.classList.remove('selected'); });
-  if (multiSel.has(val)) { multiSel.delete(val); btn.classList.remove('selected'); } else { multiSel.add(val); btn.classList.add('selected'); }
-  syncChecks();
-}
-function syncChecks() {
-  document.querySelectorAll('#q-opts .btn').forEach(b => {
-    const chk = b.querySelector('.chk');
-    if (chk) chk.textContent = b.classList.contains('selected') ? '☑' : '☐';
-  });
-}
-function confirmMulti() { if (multiSel.size === 0) multiSel.add('none'); answer(QUESTIONS[qIndex].id, [...multiSel]); }
-function answer(id, val) { answers[id] = val; qIndex++; qIndex < QUESTIONS.length ? renderQ() : showResult(); }
+      const factContainer = document.getElementById('q-fact-container');
+      if (qIndex > 0) {
+        factContainer.classList.remove('hidden');
+        document.getElementById('q-fact').textContent = QUESTIONS[qIndex - 1].fact;
+      } else {
+        factContainer.classList.add('hidden');
+      }
 
-function showResult() {
-  const s = computeScores(answers);
-  const ranked = Object.entries(s).sort((a, b) => b[1] - a[1]);
-  const winner = ranked[0][0], second = ranked[1][0];
-  const R = ROUTES[winner];
+      document.getElementById('q-title').textContent = q.title;
+      document.getElementById('q-sub').textContent = q.sub;
 
-  document.getElementById('r-hero').innerHTML =
-    `<span class="em-big">${R.em}</span><h2>你的專屬路線：${R.name}</h2><p>${R.tag}</p>`;
-  document.getElementById('r-stats').innerHTML =
-    R.stats.map(([v, k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join('');
-  document.getElementById('r-desc').innerHTML = R.desc;
+      const bmiWidget = document.getElementById('bmi-calc-widget');
+      if (q.id === 'bmi') {
+        bmiWidget.classList.remove('hidden');
+        initBmiWidget();
+      } else {
+        bmiWidget.classList.add('hidden');
+      }
 
-  const maxAvg = Math.max(...DRUGS.map(d => d.avg));
-  document.getElementById('r-bars').innerHTML = DRUGS.map(d => {
-    const hl = R.hl.includes(d.key);
-    return `<div class="bar-row${hl ? ' hl' : ''}">
-      <span class="name">${d.name}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${(d.avg / maxAvg * 100).toFixed(1)}%"></div></div>
-      <span class="val">-${d.avg.toFixed(1)} kg</span></div>`;
-  }).join('');
+      const optsBox = document.getElementById('q-opts');
+      optsBox.innerHTML = '';
+      multiSel = new Set();
 
-  document.getElementById('r-tips').innerHTML =
-    personalTips(answers, winner).map(([ic, txt]) => `<div class="tip"><span class="ic">${ic}</span><span>${txt}</span></div>`).join('');
+      q.opts.forEach(([em, label, val]) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-[#1e1c18]/30 hover:bg-white dark:hover:bg-stone-800 hover:border-brand hover:ring-2 hover:ring-brand/10 transition-all duration-150 flex items-center justify-between group active:scale-[0.99]";
+        
+        const innerContent = `
+          <div class="flex items-center gap-3">
+            <span class="text-xl group-hover:scale-110 transition-transform">${em}</span>
+            <span class="text-sm font-semibold text-stone-700 dark:text-stone-300">${label}</span>
+          </div>
+          ${q.multi ? `
+            <div class="chk-box w-5 h-5 rounded border border-stone-300 dark:border-stone-700 flex items-center justify-center text-xs font-bold text-white transition-colors"></div>
+          ` : `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-400 group-hover:text-brand transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          `}
+        `;
+        btn.innerHTML = innerContent;
+        
+        btn.onclick = () => {
+          if (q.multi) {
+            toggleMulti(btn, val);
+          } else {
+            answerQuestion(q.id, val);
+          }
+        };
+        optsBox.appendChild(btn);
+      });
 
-  document.getElementById('r-runner').innerHTML =
-    ranked[1][1] > 0 ? `🥈 <b>次佳路線：${ROUTE_NAMES[second]}</b> —— 與醫師討論時可一併評估，很多前輩最後走的是「組合技」（本院併用／轉換兩種藥物者有 55 人，平均 -5.3 kg）。` : '';
+      document.getElementById('q-confirm').className = q.multi ? "w-full py-3.5 px-6 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl transform active:scale-[0.99] transition-all duration-150 text-center block mt-4 shadow-lg shadow-brand/10" : "hidden";
+    }
 
-  show('scr-result');
-  requestAnimationFrame(() => document.getElementById('prog-fill').style.width = '100%');
-}
-</script>
+    function initBmiWidget() {
+      const hInput = document.getElementById('calc-height');
+      const wInput = document.getElementById('calc-weight');
+      const resultSpan = document.getElementById('bmi-calc-result');
+
+      function reCalc() {
+        const h = parseFloat(hInput.value) / 100;
+        const w = parseFloat(wInput.value);
+        if (h > 0 && w > 0) {
+          const bmi = (w / (h * h)).toFixed(1);
+          let label = "";
+          let targetVal = "";
+
+          if (bmi < 24) { label = "輕盈健康型"; targetVal = "<24"; }
+          else if (bmi < 27) { label = "稍微過重"; targetVal = "24-27"; }
+          else if (bmi < 30) { label = "輕度負擔"; targetVal = "27-30"; }
+          else if (bmi < 35) { label = "中度負擔"; targetVal = "30-35"; }
+          else { label = "重度負擔，宜傾力呵護"; targetVal = ">35"; }
+
+          resultSpan.textContent = `計算結果 BMI：${bmi} (${label})`;
+          
+          const arrow = document.getElementById('bmi-arrow');
+          if (arrow) {
+            arrow.style.display = 'block';
+            let pct = ((parseFloat(bmi) - 18) / (40 - 18)) * 100;
+            pct = Math.max(0, Math.min(96, pct));
+            arrow.style.left = `${pct}%`;
+          }
+          
+          const opts = QUESTIONS[0].opts;
+          const targetVal_local = targetVal;
+          const targetIndex = opts.findIndex(x => x[2] === targetVal_local);
+          if (targetIndex !== -1) {
+            const btns = document.getElementById('q-opts').children;
+            if (btns[targetIndex]) {
+              for (let b of btns) {
+                b.classList.remove('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+              }
+              btns[targetIndex].classList.add('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+              answers['bmi'] = targetVal;
+            }
+          }
+        } else {
+          resultSpan.textContent = "";
+          const arrow = document.getElementById('bmi-arrow');
+          if (arrow) arrow.style.display = 'none';
+        }
+      }
+
+      hInput.oninput = reCalc;
+      wInput.oninput = reCalc;
+      hInput.value = "";
+      wInput.value = "";
+      resultSpan.textContent = "";
+      const arrow = document.getElementById('bmi-arrow');
+      if (arrow) arrow.style.display = 'none';
+    }
+
+    function toggleMulti(btn, val) {
+      const optsBox = document.getElementById('q-opts');
+      
+      if (val === 'none') {
+        multiSel.clear();
+        multiSel.add('none');
+        Array.from(optsBox.children).forEach(b => {
+          b.classList.remove('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+          const chk = b.querySelector('.chk-box');
+          if (chk) { chk.classList.remove('bg-brand', 'border-brand'); chk.textContent = ''; }
+        });
+        btn.classList.add('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+        const chk = btn.querySelector('.chk-box');
+        if (chk) { chk.classList.add('bg-brand', 'border-brand'); chk.textContent = '✓'; }
+        return;
+      }
+
+      if (multiSel.has('none')) {
+        multiSel.delete('none');
+        const noneBtn = Array.from(optsBox.children).find(b => b.textContent.includes('目前身體都非常放鬆') || b.textContent.includes('以上皆無'));
+        if (noneBtn) {
+          noneBtn.classList.remove('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+          const chk = noneBtn.querySelector('.chk-box');
+          if (chk) { chk.classList.remove('bg-brand', 'border-brand'); chk.textContent = ''; }
+        }
+      }
+
+      const chk = btn.querySelector('.chk-box');
+      if (multiSel.has(val)) {
+        multiSel.delete(val);
+        btn.classList.remove('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+        if (chk) { chk.classList.remove('bg-brand', 'border-brand'); chk.textContent = ''; }
+      } else {
+        multiSel.add(val);
+        btn.classList.add('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+        if (chk) { chk.classList.add('bg-brand', 'border-brand'); chk.textContent = '✓'; }
+      }
+    }
+
+    function confirmMulti() {
+      if (multiSel.size === 0) multiSel.add('none');
+      answerQuestion(QUESTIONS[qIndex].id, Array.from(multiSel));
+    }
+
+    function answerQuestion(id, val) {
+      answers[id] = val;
+      qIndex++;
+      if (qIndex < QUESTIONS.length) {
+        renderQ();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const s = computeScores(answers);
+      const sorted = Object.entries(s).sort((a, b) => b[1] - a[1]);
+      const winner = sorted[0][0];
+      const second = sorted[1][0];
+      const R = ROUTES[winner];
+
+      // 1. 渲染頂部路線看板 (大地飽和漸層)
+      document.getElementById('r-hero').innerHTML = `
+        <div class="text-5xl mb-4 filter drop-shadow">${R.em}</div>
+        <h3 class="text-xs font-bold text-stone-100 tracking-widest uppercase mb-1">HEALTH ROADMAP</h3>
+        <h2 class="text-2xl sm:text-3xl font-black mb-3 tracking-tight">${R.name}</h2>
+        <p class="text-sm text-stone-50 max-w-lg mx-auto leading-relaxed font-semibold">${R.tag}</p>
+      `;
+
+      // 2. 渲染戰績統計數據卡
+      document.getElementById('r-stats').innerHTML = R.stats.map(([val, desc]) => `
+        <div class="bg-stone-50/80 dark:bg-stone-900/80 border border-stone-300 dark:border-stone-800 p-4 rounded-xl text-center">
+          <div class="text-xl font-black text-brand dark:text-brand-light tracking-tight">${val}</div>
+          <div class="text-[10px] font-bold text-stone-400 dark:text-stone-500 mt-1">${desc}</div>
+        </div>
+      `).join('');
+
+      // 3. 渲染主訴解說文字
+      document.getElementById('r-desc').innerHTML = R.desc;
+
+      // 4. 動態對比大地條形圖 (松綠、陶土高亮、動態靶心)
+      const maxVal = Math.max(...DRUGS.map(d => d.avg));
+      document.getElementById('r-bars').innerHTML = DRUGS.map(d => {
+        const isHighlighted = R.hl.includes(d.key);
+        return `
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-bold ${isHighlighted ? 'text-stone-800 dark:text-white' : 'text-stone-400 dark:text-stone-500'}">
+              <span class="flex items-center gap-1.5">
+                ${isHighlighted ? '<span class="w-2.5 h-2.5 rounded-full bg-coral animate-ping pulse-glow"></span>' : ''}
+                ${d.name} <span class="text-[10px] text-stone-400 dark:text-stone-500 font-normal">(n=${d.n})</span>
+              </span>
+              <span class="flex items-center gap-1">
+                ${isHighlighted ? '<span class="text-[10px] text-coral dark:text-coral-light font-extrabold mr-1 animate-pulse">專屬方向</span>' : ''}
+                -${d.avg.toFixed(1)} kg
+              </span>
+            </div>
+            <div class="w-full h-3.5 bg-stone-200/80 dark:bg-stone-800/80 rounded-full overflow-visible relative">
+              <div class="h-full rounded-full transition-all duration-1000 ${isHighlighted ? 'bg-gradient-to-r from-brand-light via-brand to-coral shadow-md shadow-brand/20' : 'bg-stone-300 dark:bg-stone-700'}" style="width: ${(d.avg / maxVal) * 100}%"></div>
+              ${isHighlighted ? `
+                <div class="absolute -right-1 top-1/2 -translate-y-1/2 transform translate-x-1/2 pointer-bounce z-10 text-sm">
+                  🎯
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // 5. 輸出個人化情報卡
+      document.getElementById('r-tips').innerHTML = personalTips(answers, winner).map(([ic, text]) => `
+        <div class="flex gap-3 items-start bg-stone-50/70 dark:bg-[#1a1815] p-3.5 rounded-xl border border-stone-200/50 dark:border-stone-800">
+          <span class="text-base leading-none">${ic}</span>
+          <p class="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">${text}</p>
+        </div>
+      `).join('');
+
+      // 6. 次佳路線小提示
+      const runnerBox = document.getElementById('r-runner');
+      if (sorted[1][1] > -50) {
+        runnerBox.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <span class="text-[#d97d4c] text-base">🥈</span>
+            <div>
+              <span class="font-bold text-stone-800 dark:text-white text-xs sm:text-sm">次佳路線參考方案：<b>${ROUTE_NAMES[second]}</b></span>
+              <p class="text-[11px] text-stone-400 dark:text-stone-500 mt-1">
+                與醫師或營養諮詢時，也可一併提出評估。本中心許多前輩最後採用「組合技調配」也大有收穫（合併或轉換過兩種藥物以上者達 55 人，平均減重成效為 -5.3 kg）。
+              </p>
+            </div>
+          </div>
+        `;
+      } else {
+        runnerBox.innerHTML = '';
+      }
+
+      showScreen('scr-result');
+      requestAnimationFrame(() => {
+        document.getElementById('prog-fill').style.width = '100%';
+      });
+    }
+  </script>
 </body>
 </html>
