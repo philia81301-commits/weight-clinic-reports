@@ -102,7 +102,7 @@
           </span>
           <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">⚔️ 減重大冒險</h1>
           <p class="text-sm md:text-base text-stone-50 max-w-md mx-auto leading-relaxed font-semibold">
-            簡單回答 7 個趣味關卡，探索最適合你的健康里程碑。<br class="hidden sm:inline">每一步都藏著溫柔又實用的門診小秘密！
+            簡單回答 7 個趣味關卡，再加碼 3 題世界趨勢彩蛋，探索最適合你的健康里程碑。<br class="hidden sm:inline">每一步都藏著溫柔又實用的門診小秘密！
           </p>
         </div>
 
@@ -206,6 +206,40 @@
           <button id="q-confirm" class="hidden w-full py-3.5 px-6 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl transform active:scale-[0.99] transition-all duration-150 text-center shadow-lg shadow-brand/10" onclick="confirmMulti()">
             選好了，下一關前記 →
           </button>
+        </div>
+      </div>
+
+      <!-- ═══ 彩蛋關卡：世界趨勢快問快答 ═══ -->
+      <div id="scr-bonus" class="screen hidden space-y-6">
+        <div class="bg-gradient-to-br from-[#5e834d] via-[#85ad73] to-[#d97d4c] text-white rounded-3xl p-6 text-center shadow-xl shadow-brand/20 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 text-xs font-semibold backdrop-blur-md mb-3 border border-white/25">
+            🌍 隱藏彩蛋關卡
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight mb-1">世界趨勢快問快答</h2>
+          <p class="text-xs sm:text-sm text-stone-50 font-semibold">你的專屬分析報告生成中——先來猜猜「瘦瘦針」正在如何改變全世界！</p>
+        </div>
+
+        <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 sm:p-8 shadow-md shadow-stone-300/10 dark:shadow-none space-y-5 backdrop-blur">
+          <div class="flex justify-between items-center">
+            <span id="b-step" class="text-xs font-bold text-coral-dark dark:text-coral-light bg-coral-light/30 dark:bg-coral-dark/10 px-3 py-1 rounded-full">彩蛋 1 / 3</span>
+            <span class="text-xs font-semibold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Global Trends</span>
+          </div>
+
+          <h2 id="b-title" class="text-lg sm:text-xl font-bold text-stone-800 dark:text-white tracking-tight"></h2>
+
+          <div id="b-opts" class="space-y-3"></div>
+
+          <div id="b-reveal" class="hidden bg-[#f4f0e6] dark:bg-stone-900 border-l-4 border-coral rounded-r-xl p-4 text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+            <span id="b-reveal-head" class="font-bold text-coral-dark dark:text-coral-light block mb-0.5"></span>
+            <span id="b-reveal-text"></span>
+          </div>
+
+          <button id="b-next" onclick="nextBonus()" class="hidden w-full py-3.5 px-6 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl transform active:scale-[0.99] transition-all duration-150 text-center shadow-lg shadow-brand/10"></button>
+
+          <p class="text-[10px] text-stone-400 dark:text-stone-500 text-center leading-relaxed border-t border-stone-200 dark:border-stone-800 pt-3">
+            🌍 彩蛋數據來源：國際市場趨勢觀察（美國市場，2025–2026），與本院門診統計相互獨立、僅供趣味參考。
+          </p>
         </div>
       </div>
 
@@ -405,14 +439,94 @@
         fact: '📊 門診小情報：本院最新一期的新增夥伴中，高達 88% 都有過去減重經驗。以前的波動只是身體的自我保護機制，不是你的錯喔！' },
       { id: 'budget', title: '第 5 關：每月能為這趟健康旅程撥出多少預算呢？', sub: '這會引導最適合你的科技方案配置',
         opts: [ ['🪙', '1,000 元以下 (期待完全靠飲食與自然律動調整)', 'b0'], ['💵', '1,000 – 4,500 元 (能接受常規口服輔助)', 'b1'], ['💶', '4,500 – 8,000 元 (考慮經典型一週一次針劑)', 'b2'], ['💰', '8,000 – 15,000 元 (期望採用最新高效率配方)', 'b3'], ['👑', '希望以效果和健康改善為最優先，甚至考慮手術方案', 'b4'] ],
-        fact: '📊 門診小情報：預算規劃與每個人內心對體態的急迫感、健康需求程度息息相關，選擇自己最自在的配置就好！' },
+        fact: '📊 門診小情報：預算規劃與每個人內心對體態的急迫感、健康需求程度息息相關，選擇自己最自在的配置就好！🌍 全球趨勢：消費者正把餐飲與酒水預算悄悄「大搬家」到健康投資——省下的外食錢與酒錢，其實就是你的療程基金！' },
       { id: 'inject', title: '第 6 關：對於「每週一次、微細針頭注射腸泌素減重」的看法？', sub: '現行高效率的減重方案多為每週一次的腸泌素針劑',
         opts: [ ['💉', '完全沒問題！一週一次比每天吞藥輕鬆多了', 'ok'], ['💊', '稍微抗拒針頭，希望完全以口服為主', 'oral'], ['🎯', '都不排斥！只要安全、能幫我建立習慣我都願意試', 'any'] ],
-        fact: '📊 門診小情報：本院使用藥物的夥伴中，約六成選擇 GLP-1 類方案（含口服），是目前的主流選擇。' },
+        fact: '📊 門診小情報：本院使用藥物的夥伴中，約六成選擇 GLP-1 類方案（含口服），是目前的主流選擇。🌍 全球趨勢：食品業已紛紛推出「GLP-1 友善」標籤與小分量高蛋白餐盒——世界正在為使用者改變，你從來不是少數。' },
       { id: 'style', title: '最終關：你最期待以什麼風格與團隊並肩？', sub: '這決定了我們的支援戰術',
         opts: [ ['🥗', '自主旅跑：我想全力自我挑戰，工具純粹是第二防線', 'diy'], ['🤝', '溫柔聯手：需要工具幫忙建立屏障，我再慢慢調整腳步', 'assist'], ['🔥', '全面加速：我準備好了，工具和飲食習慣調整全力推進', 'max'] ],
         fact: '📊 門診小情報：數據證明，不論選哪一條路線，只要「穩定回診不神隱」，習慣就能深耕，這才是最大的Buff！' }
     ];
+
+    // ═══ 彩蛋關卡：世界趨勢快問快答（來源：國際市場趨勢觀察，美國市場 2025-2026）═══
+    const BONUS_QUESTIONS = [
+      { title: '彩蛋 1：瘦瘦針風潮下，全球「無酒精啤酒」銷量成長了多少？',
+        opts: [ '🍺 大約 +35%', '🍺 大約 +235%', '🍺 竟然 +935%' ], correct: 2,
+        reveal: '腸泌素會同步降低大腦對酒精的渴望，許多使用者自然改喝無酒精飲品，帶動無酒精啤酒銷量狂飆 935%！不少本院夥伴也回饋「酒突然變得不想喝了」——這是療程附贈的隱藏健康紅利。' },
+      { title: '彩蛋 2：使用瘦瘦針的族群，「含酒精飲料」的花費出現什麼變化？',
+        opts: [ '📉 顯著下滑 14.5%', '📈 反而增加 5%', '➡️ 幾乎沒有變化' ], correct: 0,
+        reveal: '答案是顯著下滑 14.5%！全球消費者正把餐飲與酒水預算「大搬家」到健康投資。悄悄算給你聽：省下的酒錢與宵夜錢，其實就是你療程基金的一部分。' },
+      { title: '彩蛋 3：瘦瘦針普及後，全球「驗孕棒」銷量竟逆勢成長了多少？',
+        opts: [ '🤰 +48%', '🤰 +148%', '🤰 +248%' ], correct: 1,
+        reveal: '答案是 +148%！體重改善會讓生育力悄悄回升（多囊性卵巢的夥伴尤其明顯）。重要小提醒：懷孕期間不能使用腸泌素藥物，若有懷孕計畫或避孕需求，請務必在門診主動告知醫師。' },
+    ];
+
+    let bIndex = 0;
+
+    function startBonus() {
+      bIndex = 0;
+      renderBonus();
+      showScreen('scr-bonus');
+    }
+
+    function renderBonus() {
+      const b = BONUS_QUESTIONS[bIndex];
+      document.getElementById('b-step').textContent = `彩蛋 ${bIndex + 1} / ${BONUS_QUESTIONS.length}`;
+      document.getElementById('b-title').textContent = b.title;
+      document.getElementById('b-reveal').classList.add('hidden');
+
+      const nextBtn = document.getElementById('b-next');
+      nextBtn.classList.add('hidden');
+      nextBtn.textContent = bIndex < BONUS_QUESTIONS.length - 1 ? '下一題彩蛋 →' : '🏆 揭曉我的專屬路線結果';
+
+      const box = document.getElementById('b-opts');
+      box.innerHTML = '';
+      b.opts.forEach((label, i) => {
+        const btn = document.createElement('button');
+        btn.className = "b-opt w-full text-left p-4 rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-[#1e1c18]/30 hover:bg-white dark:hover:bg-stone-800 hover:border-brand hover:ring-2 hover:ring-brand/10 transition-all duration-150 flex items-center justify-between group active:scale-[0.99]";
+        btn.innerHTML = `
+          <span class="text-sm font-semibold text-stone-700 dark:text-stone-300">${label}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-400 group-hover:text-brand transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        `;
+        btn.onclick = () => revealBonus(i);
+        box.appendChild(btn);
+      });
+    }
+
+    function revealBonus(picked) {
+      const b = BONUS_QUESTIONS[bIndex];
+      const box = document.getElementById('b-opts');
+      if (box.children[0] && box.children[0].disabled) return;
+
+      Array.from(box.children).forEach((btn, i) => {
+        btn.disabled = true;
+        btn.classList.remove('hover:bg-white', 'dark:hover:bg-stone-800', 'hover:border-brand', 'hover:ring-2', 'hover:ring-brand/10', 'active:scale-[0.99]');
+        if (i === b.correct) {
+          btn.classList.add('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
+        } else if (i === picked) {
+          btn.classList.add('opacity-60', 'border-coral', 'bg-coral-light/15');
+        } else {
+          btn.classList.add('opacity-45');
+        }
+      });
+
+      document.getElementById('b-reveal-head').textContent = picked === b.correct ? '🎉 太厲害了，一猜就中！' : `💡 正確答案是「${b.opts[b.correct]}」`;
+      document.getElementById('b-reveal-text').textContent = b.reveal;
+      document.getElementById('b-reveal').classList.remove('hidden');
+      document.getElementById('b-next').classList.remove('hidden');
+    }
+
+    function nextBonus() {
+      bIndex++;
+      if (bIndex < BONUS_QUESTIONS.length) {
+        renderBonus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showResult();
+      }
+    }
 
     function computeScores(a) {
       const s = { lifestyle: 0, oral: 0, glp1: 0, mounjaro: 0, surgery: 0 };
@@ -497,7 +611,7 @@
         t.push(['🫁', '打鼾聲與夜間缺氧，常在體脂稍微調整 5-10% 時，就能獲得出乎意料的寧靜與通暢。這會讓你在清晨醒來時，感受到久違的清爽！']);
       }
       if (a.comorbid.includes('pcos')) {
-        t.push(['🌸', '多囊性的調皮往往與體內代謝的節奏有關。有時候，稍微釋放身體的累積負擔，就能讓體內的荷爾蒙韻律重新變得溫柔而規律。']);
+        t.push(['🌸', '多囊性的調皮往往與體內代謝的節奏有關。有時候，稍微釋放身體的累積負擔，就能讓體內的荷爾蒙韻律重新變得溫柔而規律。特別提醒：體重改善後生育力常會悄悄回升（全球驗孕棒銷量因此成長 148%！），而懷孕期間不能使用腸泌素藥物——若有懷孕計畫或避孕需求，請務必在門診主動告知醫師。']);
       }
       if (a.exp === 'veteran') {
         t.push(['⚔️', '以前曾卡關的經驗絕不是失敗，而是極具參考價值的「身心數據」。看診時不妨主動告訴醫師，過去哪些調控方式讓你感覺最舒服、最沒有壓力，能少走很多彎路！']);
@@ -507,6 +621,10 @@
       }
       if (winner === 'lifestyle') {
         t.push(['📅', '自主自然路線就像是一場長途散步。前 3 個月身心在適應，進度看似平緩，但只要與我們同行撐過 12 個月，那份堅持會為你帶來高達 7.3% 的驚艷回饋！']);
+      }
+      if (winner === 'glp1' || winner === 'mounjaro' || winner === 'surgery') {
+        t.push(['🥩', '食慾下降後的黃金法則：每餐先吃足蛋白質，再吃蔬菜與主食，才能減脂不減肌。全球食品業正流行「高蛋白、小分量」的 GLP-1 友善餐盒，跟上這股風潮，營養師也會為你按讚！']);
+        t.push(['🍺', '隱藏紅利：腸泌素常會同步降低對酒精的渴望（全球使用者的酒類支出平均下降 14.5%，無酒精啤酒銷量則成長 935%）。順勢減酒，肝臟、睡眠與體重都會一起感謝你！']);
       }
       t.push(['🗓️', '所有冒險者共通密技：第 3 到第 4 個月是心靈最容易懈怠的生理週期。在這個時段預約好下一次的陪伴門診，減重勝率立刻提高一倍。']);
       return t;
@@ -715,7 +833,7 @@
       if (qIndex < QUESTIONS.length) {
         renderQ();
       } else {
-        showResult();
+        startBonus();
       }
     }
 
