@@ -296,8 +296,8 @@
           <div class="flex items-center gap-3">
             <span class="text-3xl">🏆</span>
             <div>
-              <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">本院累計減重紀錄保持人</h3>
-              <p class="text-[11px] text-stone-500 dark:text-stone-400">來自 768 筆個案追蹤的真實歷程（已匿名處理）</p>
+              <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">本院成效標竿個案</h3>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400">取自 768 筆個案追蹤，選錄近一年內仍持續回診者（已匿名處理）</p>
             </div>
           </div>
           <div id="r-champion"></div>
@@ -419,16 +419,17 @@
       { key: 'xenical',  name: 'Xenical 羅氏鮮口服',  n: 39,  avg: 2.3, rng: '(-12.3, 1.3)' },
     ];
 
-    // 本院累計減重最多的個案（2026_06 資料；每月更新時一併重算）
+    // 本院減重成效展示個案（2026_06 資料；每月更新時一併重算）
     // ⚠️ 公開頁面：僅呈現年齡層/性別與臨床歷程，不得加入姓名、病歷號、身高或絕對體重
+    // ⚠️ 選取原則：只取「末次回診距今 12 個月內」的個案，長期失聯者不作為展示對象
     const CHAMPION = {
-      who: '28 歲男性',
-      kg: 27.5,
-      bmiFrom: 47.4,
-      bmiTo: 38.6,
-      months: 23,
-      method: '純生活型態調整（無用藥）',
-      story: '從重度肥胖（BMI 47.4）一路走了 23 個月，沒有使用任何減重藥物，靠飲食與運動調整減去 27.5 公斤、BMI 下降 8.8——這是全院目前的紀錄。它也印證了門診數據的發現：<b>能不能撐得夠久，往往比選哪一種方式更關鍵。</b>',
+      who: '36 歲男性',
+      kg: 23.4,
+      bmiFrom: 33.9,
+      bmiTo: 25.6,
+      months: 14,
+      method: 'Contrave（口服）',
+      story: '14 個月的旅程，BMI 從 33.9 一路降到 <b>25.6——已經回到接近正常體位的範圍</b>，體重少了 23.4 公斤。他走的是口服 Contrave 搭配飲食與生活調整，不是最昂貴的方案；真正的關鍵是把療程穩穩走完、每一次回診都沒有缺席。',
     };
 
     const ROUTES = {
