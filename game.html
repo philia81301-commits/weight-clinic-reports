@@ -297,10 +297,10 @@
             <span class="text-3xl">🏆</span>
             <div>
               <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">本院成效標竿個案</h3>
-              <p class="text-[11px] text-stone-500 dark:text-stone-400">取自 768 筆個案追蹤，選錄近一年內仍持續回診者（已匿名處理）</p>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400">取自 768 筆個案追蹤，選錄仍持續回診者（已匿名處理）</p>
             </div>
           </div>
-          <div id="r-champion"></div>
+          <div id="r-champion" class="space-y-3"></div>
         </div>
 
         <!-- 個人化專屬情報 -->
@@ -421,16 +421,29 @@
 
     // 本院減重成效展示個案（2026_06 資料；每月更新時一併重算）
     // ⚠️ 公開頁面：僅呈現年齡層/性別與臨床歷程，不得加入姓名、病歷號、身高或絕對體重
-    // ⚠️ 選取原則：只取「末次回診距今 12 個月內」的個案，長期失聯者不作為展示對象
-    const CHAMPION = {
-      who: '36 歲男性',
-      kg: 23.4,
-      bmiFrom: 33.9,
-      bmiTo: 25.6,
-      months: 14,
-      method: 'Contrave（口服）',
-      story: '14 個月的旅程，BMI 從 33.9 一路降到 <b>25.6——已經回到接近正常體位的範圍</b>，體重少了 23.4 公斤。他走的是口服 Contrave 搭配飲食與生活調整，不是最昂貴的方案；真正的關鍵是把療程穩穩走完、每一次回診都沒有缺席。',
-    };
+    // ⚠️ 選取原則：只取末次回診（v2）距資料月底 6 / 12 個月內者，長期失聯個案不作為展示對象
+    const CHAMPIONS = [
+      {
+        tag: '🔥 近半年內回診・減重最多',
+        who: '42 歲女性',
+        kg: 21.1,
+        bmiFrom: 37.9,
+        bmiTo: 30.0,
+        months: 5,
+        method: 'Mounjaro',
+        story: '短短 5 個月減去 21.1 公斤，BMI 從 37.9 降到 30.0——這是最近半年仍持續回診的夥伴中，成效最亮眼的一位。<b>起步的前半年往往是變化最快的時期</b>，把握住就是最好的開始。',
+      },
+      {
+        tag: '🌳 走完長期療程・BMI 回到接近正常',
+        who: '36 歲男性',
+        kg: 23.4,
+        bmiFrom: 33.9,
+        bmiTo: 25.6,
+        months: 14,
+        method: 'Contrave（口服）',
+        story: '14 個月的旅程，BMI 從 33.9 一路降到 <b>25.6——已回到接近正常體位的範圍</b>。他走的是口服 Contrave 搭配飲食與生活調整，不是最昂貴的方案；關鍵是把療程穩穩走完、每一次回診都沒有缺席。',
+      },
+    ];
 
     const ROUTES = {
       lifestyle: {
@@ -1000,17 +1013,17 @@
         `;
       }).join('');
 
-      // 4.5 本院減重紀錄保持人
-      const C = CHAMPION;
-      document.getElementById('r-champion').innerHTML = `
+      // 4.5 本院成效標竿個案（近半年冠軍 + 長期療程代表）
+      document.getElementById('r-champion').innerHTML = CHAMPIONS.map(C => `
         <div class="bg-white/80 dark:bg-stone-900/70 rounded-xl p-4 border border-coral/25 dark:border-stone-800">
+          <div class="text-[11px] font-extrabold text-[#a44d1e] dark:text-[#fad6bf] mb-2">${C.tag}</div>
           <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
             <span class="text-sm font-extrabold text-stone-800 dark:text-white">${C.who}</span>
             <span class="text-2xl font-black text-[#a44d1e] dark:text-[#fad6bf]">-${C.kg} kg</span>
           </div>
           <div class="grid grid-cols-3 gap-2 text-center">
             <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
-              <div class="text-sm font-black text-brand dark:text-brand-light">${C.bmiFrom} → ${C.bmiTo}</div>
+              <div class="text-sm font-black text-brand dark:text-brand-light">${C.bmiFrom.toFixed(1)} → ${C.bmiTo.toFixed(1)}</div>
               <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">BMI 變化（-${(C.bmiFrom - C.bmiTo).toFixed(1)}）</div>
             </div>
             <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
@@ -1018,13 +1031,13 @@
               <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減重歷程</div>
             </div>
             <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
-              <div class="text-sm font-black text-brand dark:text-brand-light">${C.method.replace('（無用藥）', '')}</div>
+              <div class="text-sm font-black text-brand dark:text-brand-light">${C.method}</div>
               <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減重方式</div>
             </div>
           </div>
           <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-3 pt-3 border-t border-stone-200 dark:border-stone-800">${C.story}</p>
         </div>
-      `;
+      `).join('');
 
       // 5. 輸出個人化情報卡
       document.getElementById('r-tips').innerHTML = personalTips(answers, winner).map(([ic, text]) => `
