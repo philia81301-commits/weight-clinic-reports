@@ -315,6 +315,18 @@
           <div id="r-bars" class="space-y-3.5 pt-2"></div>
         </div>
 
+        <!-- 本院累計減重冠軍 -->
+        <div class="bg-gradient-to-br from-coral-light/25 via-brand-light/20 to-transparent dark:from-stone-900/60 dark:to-transparent border-2 border-coral/40 dark:border-stone-800 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">🏆</span>
+            <div>
+              <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">本院累計減重紀錄保持人</h3>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400">來自 768 筆個案追蹤的真實歷程（已匿名處理）</p>
+            </div>
+          </div>
+          <div id="r-champion"></div>
+        </div>
+
         <!-- 個人化專屬情報 -->
         <div id="r-tips-card" class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 shadow-md shadow-stone-300/10 dark:shadow-none space-y-4 backdrop-blur">
           <h3 class="text-base font-bold text-stone-800 dark:text-white flex items-center gap-2 border-l-4 border-brand pl-3">
@@ -430,6 +442,18 @@
       { key: 'none',     name: '純生活型態改造 (無用藥)', n: 295, avg: 2.5, rng: '(-27.5, 3.9)' },
       { key: 'xenical',  name: 'Xenical 羅氏鮮口服',  n: 39,  avg: 2.3, rng: '(-12.3, 1.3)' },
     ];
+
+    // 本院累計減重最多的個案（2026_06 資料；每月更新時一併重算）
+    // ⚠️ 公開頁面：僅呈現年齡層/性別與臨床歷程，不得加入姓名、病歷號、身高或絕對體重
+    const CHAMPION = {
+      who: '28 歲男性',
+      kg: 27.5,
+      bmiFrom: 47.4,
+      bmiTo: 38.6,
+      months: 23,
+      method: '純生活型態調整（無用藥）',
+      story: '從重度肥胖（BMI 47.4）一路走了 23 個月，沒有使用任何減重藥物，靠飲食與運動調整減去 27.5 公斤、BMI 下降 8.8——這是全院目前的紀錄。它也印證了門診數據的發現：<b>能不能撐得夠久，往往比選哪一種方式更關鍵。</b>',
+    };
 
     const ROUTES = {
       lifestyle: {
@@ -991,6 +1015,32 @@
           </div>
         `;
       }).join('');
+
+      // 4.5 本院減重紀錄保持人
+      const C = CHAMPION;
+      document.getElementById('r-champion').innerHTML = `
+        <div class="bg-white/80 dark:bg-stone-900/70 rounded-xl p-4 border border-coral/25 dark:border-stone-800">
+          <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+            <span class="text-sm font-extrabold text-stone-800 dark:text-white">${C.who}</span>
+            <span class="text-2xl font-black text-[#a44d1e] dark:text-[#fad6bf]">-${C.kg} kg</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
+              <div class="text-sm font-black text-brand dark:text-brand-light">${C.bmiFrom} → ${C.bmiTo}</div>
+              <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">BMI 變化（-${(C.bmiFrom - C.bmiTo).toFixed(1)}）</div>
+            </div>
+            <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
+              <div class="text-sm font-black text-brand dark:text-brand-light">${C.months} 個月</div>
+              <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減重歷程</div>
+            </div>
+            <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
+              <div class="text-sm font-black text-brand dark:text-brand-light">${C.method.replace('（無用藥）', '')}</div>
+              <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減重方式</div>
+            </div>
+          </div>
+          <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-3 pt-3 border-t border-stone-200 dark:border-stone-800">${C.story}</p>
+        </div>
+      `;
 
       // 5. 輸出個人化情報卡
       document.getElementById('r-tips').innerHTML = personalTips(answers, winner).map(([ic, text]) => `
