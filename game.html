@@ -477,6 +477,7 @@
     ];
 
     let bIndex = 0;
+    let bonusDone = false;   // 彩蛋只玩一次；之後回頭改答案不再重跑
 
     function startBonus() {
       bIndex = 0;
@@ -539,6 +540,7 @@
         renderBonus();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
+        bonusDone = true;
         showResult();
       }
     }
@@ -685,6 +687,7 @@
       qIndex = 0;
       Object.keys(answers).forEach(k => delete answers[k]);
       bmiVals = { h: '', w: '' };
+      bonusDone = false;
       clearAuto();
       renderQ();
       showScreen('scr-quiz');
@@ -894,6 +897,8 @@
       qIndex++;
       if (qIndex < QUESTIONS.length) {
         renderQ();
+      } else if (bonusDone) {
+        showResult();          // 已玩過彩蛋（回頭修改答案時），直接看新結果
       } else {
         startBonus();
       }
