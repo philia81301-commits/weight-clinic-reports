@@ -296,8 +296,8 @@
           <div class="flex items-center gap-3">
             <span class="text-3xl">🏆</span>
             <div>
-              <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">本院成效標竿個案</h3>
-              <p class="text-[11px] text-stone-500 dark:text-stone-400">取自 768 筆個案追蹤，選錄仍持續回診者（已匿名處理）</p>
+              <h3 class="text-md font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">各方式的成效冠軍</h3>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400">取自 768 筆個案追蹤，各方式中減重最多且仍持續回診者（已匿名處理）</p>
             </div>
           </div>
           <div id="r-champion" class="space-y-3"></div>
@@ -424,24 +424,28 @@
     // ⚠️ 選取原則：只取末次回診（v2）距資料月底 6 / 12 個月內者，長期失聯個案不作為展示對象
     const CHAMPIONS = [
       {
-        tag: '🔥 近半年內回診・減重最多',
-        who: '42 歲女性',
-        kg: 21.1,
-        bmiFrom: 37.9,
-        bmiTo: 30.0,
-        months: 5,
-        method: 'Mounjaro',
-        story: '短短 5 個月減去 21.1 公斤，BMI 從 37.9 降到 30.0——這是最近半年仍持續回診的夥伴中，成效最亮眼的一位。<b>起步的前半年往往是變化最快的時期</b>，把握住就是最好的開始。',
+        method: 'Contrave（口服）',
+        badge: '🌳 BMI 回到接近正常',
+        who: '36 歲男性', kg: 23.4, pct: 24.5, bmiFrom: 33.9, bmiTo: 25.6, months: 14,
+        note: '14 個月穩定回診，減去體重的 <b>24.5%</b>，BMI 降到 <b>25.6——已回到接近正常體位</b>。走的不是最昂貴的方案，關鍵是把療程完整走完。',
       },
       {
-        tag: '🌳 走完長期療程・BMI 回到接近正常',
-        who: '36 歲男性',
-        kg: 23.4,
-        bmiFrom: 33.9,
-        bmiTo: 25.6,
-        months: 14,
-        method: 'Contrave（口服）',
-        story: '14 個月的旅程，BMI 從 33.9 一路降到 <b>25.6——已回到接近正常體位的範圍</b>。他走的是口服 Contrave 搭配飲食與生活調整，不是最昂貴的方案；關鍵是把療程穩穩走完、每一次回診都沒有缺席。',
+        method: 'Mounjaro',
+        badge: '🔥 近半年內回診・減重最多',
+        who: '42 歲女性', kg: 21.1, pct: 20.7, bmiFrom: 37.9, bmiTo: 30.0, months: 5,
+        note: '短短 5 個月減去體重的 <b>20.7%</b>，BMI 從 37.9 降到 30.0——<b>起步的前半年往往是變化最快的時期</b>，把握住就是最好的開始。',
+      },
+      {
+        method: 'Ozempic',
+        badge: '',
+        who: '59 歲男性', kg: 18.2, pct: 15.7, bmiFrom: 40.2, bmiTo: 33.9, months: 7,
+        note: '7 個月減去 15.7%，說明<b>中高齡族群同樣能有顯著成效</b>，年齡從來不是放棄的理由。',
+      },
+      {
+        method: 'Wegovy',
+        badge: '',
+        who: '44 歲女性', kg: 13.6, pct: 10.2, bmiFrom: 53.3, bmiTo: 47.8, months: 6,
+        note: '從 BMI 53.3 的重度肥胖起步，6 個月減去 <b>10.2%</b>，已跨過「≥10% 顯著臨床效益」門檻——起點再高，都有前進的空間。',
       },
     ];
 
@@ -1016,7 +1020,10 @@
       // 4.5 本院成效標竿個案（近半年冠軍 + 長期療程代表）
       document.getElementById('r-champion').innerHTML = CHAMPIONS.map(C => `
         <div class="bg-white/80 dark:bg-stone-900/70 rounded-xl p-4 border border-coral/25 dark:border-stone-800">
-          <div class="text-[11px] font-extrabold text-[#a44d1e] dark:text-[#fad6bf] mb-2">${C.tag}</div>
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-brand/15 dark:bg-brand-dark/40 text-brand-dark dark:text-brand-light text-xs font-extrabold">${C.method}</span>
+            ${C.badge ? `<span class="text-[10px] font-extrabold text-[#a44d1e] dark:text-[#fad6bf]">${C.badge}</span>` : ''}
+          </div>
           <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
             <span class="text-sm font-extrabold text-stone-800 dark:text-white">${C.who}</span>
             <span class="text-2xl font-black text-[#a44d1e] dark:text-[#fad6bf]">-${C.kg} kg</span>
@@ -1027,15 +1034,15 @@
               <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">BMI 變化（-${(C.bmiFrom - C.bmiTo).toFixed(1)}）</div>
             </div>
             <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
+              <div class="text-sm font-black text-brand dark:text-brand-light">${C.pct.toFixed(1)}%</div>
+              <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減去原體重</div>
+            </div>
+            <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
               <div class="text-sm font-black text-brand dark:text-brand-light">${C.months} 個月</div>
               <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減重歷程</div>
             </div>
-            <div class="bg-stone-50 dark:bg-stone-950/50 rounded-lg py-2.5 px-1">
-              <div class="text-sm font-black text-brand dark:text-brand-light">${C.method}</div>
-              <div class="text-[10px] font-bold text-stone-500 dark:text-stone-400 mt-0.5">減重方式</div>
-            </div>
           </div>
-          <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-3 pt-3 border-t border-stone-200 dark:border-stone-800">${C.story}</p>
+          <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-3 pt-3 border-t border-stone-200 dark:border-stone-800">${C.note}</p>
         </div>
       `).join('');
 
