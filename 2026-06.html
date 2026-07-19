@@ -38,7 +38,7 @@
 
 <header>
   <h1>減重門診月度分析報告</h1>
-  <p>資料期間：2025年9月 – 2026年6月｜評估問卷 317 份（去重複 315 份）｜個案追蹤檔 768 筆｜產出日期：2026年7月5日（2026年7月10日修正版：藥物併用/轉換歸類）</p>
+  <p>資料期間：2025年9月 – 2026年6月｜評估問卷 317 份（去重複 315 份）｜個案追蹤檔 768 筆｜產出日期：2026年7月5日（修正版 2026年7月19日：藥物併用/轉換歸類、個案檔性別編碼）</p>
 </header>
 
 <div class="cards">
@@ -118,7 +118,7 @@
     <tr><td>Saxenda ※</td><td>8</td><td>1.0%</td><td>-6.5（-15.6, -0.2）</td></tr>
     <tr><td>Acarbose ※</td><td>4</td><td>0.5%</td><td>-3.5（-7.4, 0.7）</td></tr>
   </table>
-  <div class="note">已套用機構用藥代碼表（0=無、1=Contrave、2=Jardiance、3=Ozempic、4=Saxenda、5=Xenical、6=併用兩種）完成全部歸類；僅 1 筆登錄「7」待確認（代碼表無 7）。全體平均減重成效 <b>-2.7 kg</b>（男 -2.4、女 -3.2）。※ n&lt;10 樣本過小，數字僅供參考、不宜作為成效亮點：Saxenda 單獨使用 8 人中 4 人未回診、可評估僅 5 人，kg 平均受兩位初診 &gt;150 kg 個案拉抬，換算減重百分比僅約 4.9%。</div>
+  <div class="note">已套用機構用藥代碼表（0=無、1=Contrave、2=Jardiance、3=Ozempic、4=Saxenda、5=Xenical、6=併用兩種）完成全部歸類；僅 1 筆登錄「7」待確認（代碼表無 7）。全體平均減重成效 <b>-2.7 kg</b>（男 -3.2、女 -2.4）。※ n&lt;10 樣本過小，數字僅供參考、不宜作為成效亮點：Saxenda 單獨使用 8 人中 4 人未回診、可評估僅 5 人，kg 平均受兩位初診 &gt;150 kg 個案拉抬，換算減重百分比僅約 4.9%。</div>
   <div class="alert"><b>2026-07-10 歸類修正：</b>原發布版有 9 筆以空格、逗號或「to」分隔的兩種藥名寫法（如 saxenda mounjaro、contrave to ozempic、jardiance,ozempic）被誤歸為單一藥物，已全數改列「併用／轉換兩種」。原發布數字：Mounjaro 131、Ozempic 85、Contrave 64（-4.4）、Wegovy 35（-4.0）、Jardiance 30（-2.4）、Saxenda 9（-7.2）、併用 42（-5.7）。分析腳本已修正，後續月份自動採新口徑。</div>
 </section>
 
@@ -128,14 +128,15 @@
   <table>
     <tr><th>族群</th><th>方法B：結算至5月底（正式，n=725）</th><th>方法A：全部個案（參考，n=768）</th></tr>
     <tr><td><b>整體</b></td><td><b>38.1%</b>（276/725）</td><td>40.4%（310/768）</td></tr>
-    <tr><td>男性</td><td>37.7%</td><td>40.9%</td></tr>
-    <tr><td>女性</td><td>38.4%</td><td>39.6%</td></tr>
+    <tr><td>男性</td><td>38.4%</td><td>39.6%</td></tr>
+    <tr><td>女性</td><td>37.7%</td><td>40.9%</td></tr>
     <tr><td>30歲以下</td><td><b>42.9%</b>（最高）</td><td>45.5%</td></tr>
     <tr><td>30-39歲</td><td>39.1%</td><td>41.6%</td></tr>
     <tr><td>40-49歲</td><td>37.7%</td><td>41.4%</td></tr>
     <tr><td>50-59歲</td><td>38.7%</td><td>39.5%</td></tr>
     <tr><td>60歲以上</td><td>29.8%（最低）</td><td>30.8%</td></tr>
   </table>
+  <div class="alert"><b>2026-07-19 性別編碼更正：</b>個案檔 gender 欄位實際為 <b>0=女、1=男</b>（原分析誤用 0=男、1=女），本節男女未回診率與第五節男女平均減重已對調更正。佐證：以姓名比對評估表性別欄 299 筆中 294 筆吻合；各組平均身高 code0=160.8cm、code1=173.0cm。<b>整體數字與各年齡層數字不受影響</b>；問卷相關的性別統計（第一、三節）使用問卷自身欄位，亦不受影響。</div>
   <div class="chart-row" style="margin-top:16px">
     <div class="chart-box"><canvas id="fuChart"></canvas></div>
     <div>
