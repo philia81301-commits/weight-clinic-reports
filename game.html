@@ -206,6 +206,16 @@
           <button id="q-confirm" class="hidden w-full py-3.5 px-6 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl transform active:scale-[0.99] transition-all duration-150 text-center shadow-lg shadow-brand/10" onclick="confirmMulti()">
             選好了，下一關前記 →
           </button>
+
+          <!-- 關卡導覽：回上一關修改 / 自動跳關提示 -->
+          <div class="flex items-center justify-between gap-3 pt-1 min-h-[32px]">
+            <button id="q-back" onclick="goBack()" class="hidden text-xs font-bold text-stone-500 dark:text-stone-400 hover:text-brand dark:hover:text-brand-light px-3 py-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+              ← 回上一關修改
+            </button>
+            <span id="q-autonote" class="hidden text-xs font-bold text-brand dark:text-brand-light ml-auto">
+              ✅ 已依 BMI 幫你選好，即將前往下一關…
+            </span>
+          </div>
         </div>
       </div>
 
@@ -355,9 +365,14 @@
         <div class="bg-white/90 dark:bg-[#1e1c18]/90 border border-coral-light/30 dark:border-stone-800 rounded-2xl p-6 shadow-md shadow-stone-300/10 dark:shadow-none text-center space-y-4 backdrop-blur">
           <div id="r-runner" class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed text-left"></div>
           
-          <button onclick="restart()" class="w-full py-3.5 px-6 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-white font-bold rounded-xl transition-all duration-150">
-            🔄 重啟冒險，測試不同方向
-          </button>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button onclick="editLast()" class="w-full py-3.5 px-6 bg-white hover:bg-stone-50 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 font-bold rounded-xl transition-all duration-150">
+              ← 回上一關修改答案
+            </button>
+            <button onclick="restart()" class="w-full py-3.5 px-6 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-white font-bold rounded-xl transition-all duration-150">
+              🔄 重啟冒險，測試不同方向
+            </button>
+          </div>
 
           <p class="text-[11px] text-stone-400 dark:text-stone-500 leading-relaxed max-w-lg mx-auto">
             本遊戲依據高榮代謝減重中心 2026 年 6 月之匿名彙整統計學數據設計。任何藥物皆有其適應與禁忌症，最合適您的專屬配置，請依醫師專業門診評估為準。
@@ -633,6 +648,26 @@
     let qIndex = 0;
     const answers = {};
     let multiSel = new Set();
+    let bmiVals = { h: '', w: '' };   // 記住 BMI 輸入值，回上一關時還原
+    let autoTimer = null;             // BMI 算完後自動跳關的計時器
+
+    const SEL_CLS = ['ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30'];
+
+    function setOptSelected(btn, on) {
+      if (!btn) return;
+      btn.classList[on ? 'add' : 'remove'](...SEL_CLS);
+      const chk = btn.querySelector('.chk-box');
+      if (chk) {
+        chk.classList[on ? 'add' : 'remove']('bg-brand', 'border-brand');
+        chk.textContent = on ? '✓' : '';
+      }
+    }
+
+    function clearAuto() {
+      if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+      const note = document.getElementById('q-autonote');
+      if (note) note.classList.add('hidden');
+    }
 
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => {
@@ -649,6 +684,8 @@
     function startGame() {
       qIndex = 0;
       Object.keys(answers).forEach(k => delete answers[k]);
+      bmiVals = { h: '', w: '' };
+      clearAuto();
       renderQ();
       showScreen('scr-quiz');
     }
@@ -659,7 +696,11 @@
 
     function renderQ() {
       const q = QUESTIONS[qIndex];
-      
+      clearAuto();
+
+      const backBtn = document.getElementById('q-back');
+      if (backBtn) backBtn.classList.toggle('hidden', qIndex === 0);
+
       const progressPercent = (qIndex / QUESTIONS.length) * 100;
       document.getElementById('prog-fill').style.width = progressPercent + '%';
       document.getElementById('prog-step').textContent = `第 ${qIndex + 1} / ${QUESTIONS.length} 關`;
@@ -682,12 +723,7 @@
       document.getElementById('q-sub').textContent = q.sub;
 
       const bmiWidget = document.getElementById('bmi-calc-widget');
-      if (q.id === 'bmi') {
-        bmiWidget.classList.remove('hidden');
-        initBmiWidget();
-      } else {
-        bmiWidget.classList.add('hidden');
-      }
+      bmiWidget.classList.toggle('hidden', q.id !== 'bmi');
 
       const optsBox = document.getElementById('q-opts');
       optsBox.innerHTML = '';
@@ -722,6 +758,23 @@
         optsBox.appendChild(btn);
       });
 
+      // 還原先前作答，讓「回上一關」能看到並修改原本的選擇
+      const prevAns = answers[q.id];
+      if (prevAns !== undefined) {
+        if (q.multi && Array.isArray(prevAns)) {
+          multiSel = new Set(prevAns);
+          q.opts.forEach(([, , val], i) => {
+            if (multiSel.has(val)) setOptSelected(optsBox.children[i], true);
+          });
+        } else if (!q.multi) {
+          const i = q.opts.findIndex(o => o[2] === prevAns);
+          if (i !== -1) setOptSelected(optsBox.children[i], true);
+        }
+      }
+
+      // 選項建好後才初始化計算器（它需要選項按鈕存在才能高亮）
+      if (q.id === 'bmi') initBmiWidget();
+
       document.getElementById('q-confirm').className = q.multi ? "w-full py-3.5 px-6 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl transform active:scale-[0.99] transition-all duration-150 text-center block mt-4 shadow-lg shadow-brand/10" : "hidden";
     }
 
@@ -729,58 +782,66 @@
       const hInput = document.getElementById('calc-height');
       const wInput = document.getElementById('calc-weight');
       const resultSpan = document.getElementById('bmi-calc-result');
+      const arrow = document.getElementById('bmi-arrow');
 
-      function reCalc() {
+      // fromUser=true 才會自動跳關；回上一關還原數值時不跳
+      function reCalc(fromUser) {
+        clearAuto();
+        bmiVals = { h: hInput.value, w: wInput.value };
+
         const h = parseFloat(hInput.value) / 100;
         const w = parseFloat(wInput.value);
-        if (h > 0 && w > 0) {
-          const bmi = (w / (h * h)).toFixed(1);
-          let label = "";
-          let targetVal = "";
-
-          if (bmi < 24) { label = "輕盈健康型"; targetVal = "<24"; }
-          else if (bmi < 27) { label = "稍微過重"; targetVal = "24-27"; }
-          else if (bmi < 30) { label = "輕度負擔"; targetVal = "27-30"; }
-          else if (bmi < 35) { label = "中度負擔"; targetVal = "30-35"; }
-          else { label = "重度負擔，宜傾力呵護"; targetVal = ">35"; }
-
-          resultSpan.textContent = `計算結果 BMI：${bmi} (${label})`;
-          
-          const arrow = document.getElementById('bmi-arrow');
-          if (arrow) {
-            arrow.style.display = 'block';
-            let pct = ((parseFloat(bmi) - 18) / (40 - 18)) * 100;
-            pct = Math.max(0, Math.min(96, pct));
-            arrow.style.left = `${pct}%`;
-          }
-          
-          const opts = QUESTIONS[0].opts;
-          const targetVal_local = targetVal;
-          const targetIndex = opts.findIndex(x => x[2] === targetVal_local);
-          if (targetIndex !== -1) {
-            const btns = document.getElementById('q-opts').children;
-            if (btns[targetIndex]) {
-              for (let b of btns) {
-                b.classList.remove('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
-              }
-              btns[targetIndex].classList.add('ring-2', 'ring-brand', 'border-brand', 'bg-brand-light/35', 'dark:bg-brand-dark/30');
-              answers['bmi'] = targetVal;
-            }
-          }
-        } else {
-          resultSpan.textContent = "";
-          const arrow = document.getElementById('bmi-arrow');
+        if (!(h > 0 && w > 0)) {
+          resultSpan.textContent = '';
           if (arrow) arrow.style.display = 'none';
+          return;
+        }
+
+        const bmi = (w / (h * h)).toFixed(1);
+        let label, targetVal;
+        if (bmi < 24)      { label = '體重正常範圍'; targetVal = '<24'; }
+        else if (bmi < 27) { label = '稍微過重';     targetVal = '24-27'; }
+        else if (bmi < 30) { label = '輕度負擔';     targetVal = '27-30'; }
+        else if (bmi < 35) { label = '中度負擔';     targetVal = '30-35'; }
+        else               { label = '重度負擔，宜傾力呵護'; targetVal = '>35'; }
+
+        resultSpan.textContent = `計算結果 BMI：${bmi} (${label})`;
+        if (arrow) {
+          arrow.style.display = 'block';
+          const pct = ((parseFloat(bmi) - 18) / (40 - 18)) * 100;
+          arrow.style.left = `${Math.max(0, Math.min(96, pct))}%`;
+        }
+
+        const targetIndex = QUESTIONS[0].opts.findIndex(x => x[2] === targetVal);
+        if (targetIndex === -1) return;
+        const btns = document.getElementById('q-opts').children;
+        Array.from(btns).forEach(b => setOptSelected(b, false));
+        setOptSelected(btns[targetIndex], true);
+        answers['bmi'] = targetVal;
+
+        if (fromUser) {
+          const note = document.getElementById('q-autonote');
+          if (note) note.classList.remove('hidden');
+          autoTimer = setTimeout(() => answerQuestion('bmi', targetVal), 1400);
         }
       }
 
-      hInput.oninput = reCalc;
-      wInput.oninput = reCalc;
-      hInput.value = "";
-      wInput.value = "";
-      resultSpan.textContent = "";
-      const arrow = document.getElementById('bmi-arrow');
-      if (arrow) arrow.style.display = 'none';
+      hInput.oninput = () => reCalc(true);
+      wInput.oninput = () => reCalc(true);
+      hInput.value = bmiVals.h;
+      wInput.value = bmiVals.w;
+      reCalc(false);
+    }
+
+    function goBack() {
+      clearAuto();
+      if (qIndex > 0) { qIndex--; renderQ(); }
+    }
+
+    function editLast() {
+      qIndex = QUESTIONS.length - 1;
+      renderQ();
+      showScreen('scr-quiz');
     }
 
     function toggleMulti(btn, val) {
@@ -828,6 +889,7 @@
     }
 
     function answerQuestion(id, val) {
+      clearAuto();
       answers[id] = val;
       qIndex++;
       if (qIndex < QUESTIONS.length) {
