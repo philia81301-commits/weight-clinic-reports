@@ -894,9 +894,19 @@
         answers['bmi'] = targetVal;
 
         if (fromUser) {
+          // 只有兩欄都像「填完整的成人數值」才啟動自動跳關；
+          // 否則逐字輸入時，半截體重（如只打了「5」）算出的低 BMI 會誤觸倒數，
+          // 讓打字慢的使用者還沒填完就被跳到下一關。
+          const hv = parseFloat(hInput.value);
+          const wv = parseFloat(wInput.value);
+          const looksComplete = hv >= 100 && wv >= 30;
           const note = document.getElementById('q-autonote');
-          if (note) note.classList.remove('hidden');
-          autoTimer = setTimeout(() => answerQuestion('bmi', targetVal), 1400);
+          if (looksComplete) {
+            if (note) note.classList.remove('hidden');
+            autoTimer = setTimeout(() => { if (qIndex === 0) answerQuestion('bmi', targetVal); }, 1600);
+          } else {
+            if (note) note.classList.add('hidden');
+          }
         }
       }
 
