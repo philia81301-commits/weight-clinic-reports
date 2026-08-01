@@ -3,27 +3,502 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>減重門診月度分析報告索引</title>
+<title>減重門診月度分析報告 2026/07</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  body { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; background: #f4f6f9; color: #2c3e50; max-width: 720px; margin: 0 auto; padding: 32px 20px; }
-  h1 { color: #1a5276; border-bottom: 3px solid #2e86c1; padding-bottom: 10px; }
-  ul { list-style: none; padding: 0; }
-  li { background: #fff; border-radius: 10px; margin: 12px 0; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
-  li a { display: block; padding: 18px 20px; color: #2e86c1; font-size: 1.1em; font-weight: 600; text-decoration: none; }
-  li a:hover { background: #eaf2f8; border-radius: 10px; }
-  li span { color: #7f8c8d; font-weight: 400; font-size: .85em; margin-left: 8px; }
-  .latest { border-left: 5px solid #2e86c1; }
-  .tag { display: inline-block; background: #2e86c1; color: #fff; font-size: .7em; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
-  footer { color: #95a5a6; font-size: .85em; margin-top: 32px; text-align: center; }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;700&display=swap');
+:root{
+  --navy:#1F4E79; --blue:#2E75B6; --teal:#028090; --lteal:#D0EFF3;
+  --green:#1D6A36; --lgreen:#D4EDDA; --red:#C00000; --lred:#FCE4D6;
+  --amber:#9C5700; --lamber:#FFF2CC; --purple:#3C3489; --lpurp:#EEEDFE;
+  --gray:#595959; --lgray:#F2F2F2; --bg:#F4F7FB; --dark:#1C1C1C; --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans','Noto Sans TC',sans-serif;background:var(--bg);color:var(--dark);font-size:14px}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#0d2b4a 60%,#021a30 100%);color:#fff;padding:44px 40px 32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--teal)}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:11px;letter-spacing:1px;color:#8EC4E8;margin-bottom:12px}
+.hero-title{font-size:30px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+.hero-sub{font-size:13px;color:#8EC4E8;margin-bottom:28px}
+.hero-kpis{display:flex;gap:36px;flex-wrap:wrap}
+.hero-kpi .val{font-size:34px;font-weight:700;line-height:1}
+.hero-kpi .lab{font-size:11px;color:#8EC4E8;margin-top:4px}
+nav{background:#fff;border-bottom:1px solid #DDE3ED;padding:0 40px;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nav-tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap}
+.nav-tab:hover{color:var(--navy)}
+.nav-tab.active{color:var(--navy);border-bottom-color:var(--teal)}
+.main{padding:32px 40px;max-width:1200px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.kpi-card{background:#fff;border-radius:10px;padding:18px;border-left:4px solid var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.kpi-label{font-size:11px;color:var(--gray);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.kpi-val{font-size:26px;font-weight:700;line-height:1.1}
+.kpi-range{font-size:10px;color:#888;margin-top:3px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.chart-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.chart-card.full{grid-column:1/-1}
+.chart-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:14px}
+.sec-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-title::before{content:'';display:inline-block;width:4px;height:16px;background:var(--teal);border-radius:2px}
+.bar-list{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-lbl{width:90px;font-size:11px;color:var(--gray);text-align:right;flex-shrink:0}
+.bar-track{flex:1;background:#EEF2F8;border-radius:4px;height:18px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-val{width:90px;font-size:11px;font-weight:600;flex-shrink:0}
+.drug-table{width:100%;border-collapse:collapse;font-size:12px}
+.drug-table th{padding:9px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:center}
+.drug-table th:first-child{text-align:left}
+.drug-table td{padding:8px 10px;text-align:center;border-bottom:1px solid #EEF2F8}
+.drug-table td:first-child{text-align:left;font-weight:600}
+.drug-table tr:nth-child(even) td{background:#FAFBFD}
+.drug-table tr:hover td{background:#EEF6FF}
+.eff-good{color:var(--green);font-weight:700}
+.eff-mid{color:var(--blue);font-weight:600}
+.eff-low{color:var(--gray)}
+.drug-badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700}
+.drug-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.drug-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:2px solid transparent;opacity:.4;transition:.2s}
+.drug-btn.on{opacity:1}
+.return-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.return-card{background:#fff;border-radius:10px;padding:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.return-val{font-size:32px;font-weight:700}
+.return-lab{font-size:11px;color:var(--gray);margin-top:4px}
+.insight-box{background:var(--lpurp);border-left:4px solid var(--purple);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.insight-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.insight-text{font-size:12px;color:var(--gray);line-height:1.6}
+.update-badge{background:linear-gradient(135deg,#1D9E75,#028090);color:#fff;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;margin-left:8px}
+footer{text-align:center;padding:24px;color:#aaa;font-size:11px;border-top:1px solid #DDE3ED;margin-top:40px}
+@media(max-width:768px){.hero{padding:24px 20px}.main{padding:20px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-grid{grid-template-columns:1fr}.nav{padding:0 16px;overflow-x:auto}}
 </style>
 </head>
 <body>
-<h1>減重門診月度分析報告</h1>
-<ul>
-  <li class="latest"><a href="2026-07.html">2026年7月報告<span class="tag">最新</span><span>問卷 403 份｜個案 790 筆｜資料截止 2026/7/30</span></a></li>
-  <li><a href="2026-06.html">2026年6月報告<span>問卷 317 份｜個案 768 筆｜2026/7/10 修正版</span></a></li>
-  <li><a href="game.html">⚔️ 減重大冒險（衛教互動遊戲）<span>答 7 關找出你的專屬減重路線｜依本院真實成效統計</span></a></li>
-</ul>
-<footer>報告僅含匿名彙總統計，不含任何個人資料｜由 Claude 自動產出</footer>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">2026 / 07 月度報告</div>
+  <div class="hero-title">減重門診月度分析 <span class="update-badge">最新更新</span></div>
+  <div class="hero-sub">資料截止：2026/7/30 ｜ 個案 n=790 ｜ 評估問卷 n=403（2025/9–2026/7）</div>
+  <div class="hero-kpis">
+    <div class="hero-kpi"><div class="val" style="color:#5BC8FF">790</div><div class="lab">總個案數</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#5DCAA5">-5.5 kg</div><div class="lab">有回診平均減重</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#EF9F27">39.1%</div><div class="lab">未回診率</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#5BC8FF">63.0%</div><div class="lab">有處方（含手術評估）</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#5DCAA5">403</div><div class="lab">評估問卷數</div></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-tab active" onclick="switchTab(this,'s1')">基本資料</div>
+  <div class="nav-tab" onclick="switchTab(this,'s2')">減重成效</div>
+  <div class="nav-tab" onclick="switchTab(this,'s3')">藥物分析</div>
+  <div class="nav-tab" onclick="switchTab(this,'s4')">疾病與意願</div>
+  <div class="nav-tab" onclick="switchTab(this,'s5')">回診追蹤</div>
+</nav>
+
+<div class="main">
+
+<!-- S1 基本資料 -->
+<div class="section active" id="s1">
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-left-color:var(--navy)">
+      <div class="kpi-label">平均年齡</div>
+      <div class="kpi-val" style="color:var(--navy)">43.1 歲</div>
+      <div class="kpi-range">（11, 80）歲</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--teal)">
+      <div class="kpi-label">平均體重</div>
+      <div class="kpi-val" style="color:var(--teal)">91.3 kg</div>
+      <div class="kpi-range">（44.0, 189.7）kg</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:#843C0C">
+      <div class="kpi-label">平均 BMI</div>
+      <div class="kpi-val" style="color:#843C0C">33.0</div>
+      <div class="kpi-range">（19.3, 64.9）</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--green)">
+      <div class="kpi-label">有效個案</div>
+      <div class="kpi-val" style="color:var(--green)">790 人</div>
+      <div class="kpi-range">女 460 / 男 330</div>
+    </div>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">性別 × 年齡層分布</div>
+      <div style="height:240px"><canvas id="genderAgeChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">BMI 分布｜平均 33.0（19.3, 64.9）</div>
+      <div style="height:240px"><canvas id="bmiChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">問卷月份分布（n=403，2025/9~2026/7）</div>
+      <div style="height:220px"><canvas id="monthChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">BMI 分組人數</div>
+      <div style="height:220px"><canvas id="bmiGroupChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 減重成效 -->
+<div class="section" id="s2">
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-left-color:var(--green)">
+      <div class="kpi-label">有回診平均減重</div>
+      <div class="kpi-val" style="color:var(--green)">-5.5 kg</div>
+      <div class="kpi-range">（-27.5, +18.7）</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--teal)">
+      <div class="kpi-label">有回診率</div>
+      <div class="kpi-val" style="color:var(--teal)">45.8%</div>
+      <div class="kpi-range">362 / 790 人</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--blue)">
+      <div class="kpi-label">平均追蹤月數</div>
+      <div class="kpi-val" style="color:var(--blue)">7.0 月</div>
+      <div class="kpi-range">（1, 53）月</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--navy)">
+      <div class="kpi-label">有藥物平均減重</div>
+      <div class="kpi-val" style="color:var(--navy)">-6.0 kg</div>
+      <div class="kpi-range">vs. 無藥 -3.6 kg</div>
+    </div>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">各藥物減重成效（kg）</div>
+      <div style="height:280px"><canvas id="effBarChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">有藥 vs 無藥成效比較</div>
+      <div style="height:280px"><canvas id="drugVsNoChart"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">追蹤月數 × 減重成效趨勢</div>
+    <div style="height:240px"><canvas id="moEffChart"></canvas></div>
+  </div>
+</div>
+
+<!-- S3 藥物分析 -->
+<div class="section" id="s3">
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">藥物使用比例</div>
+      <div style="height:260px"><canvas id="drugPieChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">各藥物性別分布</div>
+      <div style="height:260px"><canvas id="drugGenderChart"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card full" style="margin-bottom:20px">
+    <div class="chart-title">藥物減重趨勢切換（點選藥物名稱）</div>
+    <div class="drug-selector" id="drugSelector"></div>
+    <div style="height:260px"><canvas id="trendChart"></canvas></div>
+  </div>
+  <div class="chart-card" style="margin-bottom:0">
+    <div class="chart-title">各藥物成效明細｜平均（最小, 最大）</div>
+    <table class="drug-table" id="drugDetailTable"></table>
+  </div>
+</div>
+
+<!-- S4 疾病與意願 -->
+<div class="section" id="s4">
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">疾病分布（問卷 n=403）<span style="color:#C0392B;font-weight:400;font-size:11px"> ※測試填答尚未排除，待確認</span></div>
+      <div class="bar-list" id="diseaseBars"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">每月費用意願分布</div>
+      <div style="height:240px"><canvas id="budgetChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">自費藥物意願</div>
+      <div style="height:200px"><canvas id="willChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">減重動機分布</div>
+      <div style="height:200px"><canvas id="motivChart"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">飲食習慣分布</div>
+    <div class="bar-list" id="dietBars"></div>
+  </div>
+</div>
+
+<!-- S5 回診追蹤 -->
+<div class="section" id="s5">
+  <div class="return-grid">
+    <div class="return-card">
+      <div class="return-val" style="color:var(--red)">39.1%</div>
+      <div class="return-lab">未回診率（309/790 人）</div>
+    </div>
+    <div class="return-card">
+      <div class="return-val" style="color:var(--green)">45.8%</div>
+      <div class="return-lab">有回診（362/790 人）｜狀態不明 119 人</div>
+    </div>
+    <div class="return-card">
+      <div class="return-val" style="color:var(--navy)">7.0 月</div>
+      <div class="return-lab">平均追蹤月數（1, 53）</div>
+    </div>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">各年齡層未回診率</div>
+      <div style="height:240px"><canvas id="ageReturnChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">回診月數分布</div>
+      <div style="height:240px"><canvas id="moDistChart"></canvas></div>
+    </div>
+    <div class="chart-card full">
+      <div class="chart-title">各藥物未回診率 ── 有處方者明顯較低</div>
+      <div style="height:200px"><canvas id="drugReturnChart"></canvas></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:0">
+    <div class="insight-box">
+      <div class="insight-title">⚠ 年輕族群流失最高</div>
+      <div class="insight-text">30歲以下未回診率 42.5%，建議加強初診追蹤。60歲以上最低 31.6%，依從性最佳。</div>
+    </div>
+    <div class="insight-box" style="border-left-color:var(--purple);background:var(--lpurp)">
+      <div class="insight-title">💊 處方調整＝留診關鍵</div>
+      <div class="insight-text">併用／轉換者未回診僅 5.3%、Jardiance 16.7%、Ozempic 19.8%，無藥者高達 59.2%。願意調整處方＝高度投入。</div>
+    </div>
+    <div class="insight-box" style="border-left-color:var(--green);background:var(--lgreen)">
+      <div class="insight-title">📈 Mounjaro 成效領先</div>
+      <div class="insight-text">Mounjaro 139 人（17.6%），平均 -7.3 kg 為所有方案最佳。6-8 個月追蹤者平均減重達 12.3%。</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<footer>
+  減重門診月度分析 2026/07 ｜ 個案 n=790 ｜ 問卷 n=403（2025/9~2026/7/30）<br>
+  ✦ 阿克 Claude AI 分析產出 ｜ 資料來源：Google Drive 減重門診分析資料夾
+</footer>
+
+<script>
+// ── Tab ──
+function switchTab(el, id){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+const DC={
+  Mounjaro:'#3C3489', Wegovy:'#534AB7', Ozempic:'#378ADD',
+  Rybelsus:'#AFA9EC', Contrave:'#D85A30', Xenical:'#EF9F27',
+  Jardiance:'#1D9E75', Saxenda:'#0F6E56', '無藥物':'#888780', '併用/轉換':'#0F6E56',
+};
+
+// S1 基本資料
+new Chart('genderAgeChart',{type:'bar',data:{labels:['<30','30-39','40-49','50-59','60+'],
+  datasets:[
+    {label:'女',data:[83,120,103,94,60],backgroundColor:'#D4537E',borderWidth:0},
+    {label:'男',data:[63,76,83,54,54],backgroundColor:'#378ADD',borderWidth:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`  ${ctx.dataset.label}: ${ctx.parsed.y}人`}}},
+  scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{stacked:true,grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}}}}});
+
+const bmiL=['<24','24-27','27-30','30-35','>35'],bmiD=[27,96,162,268,232],bmiC=['#1D9E75','#5DCAA5','#EF9F27','#D85A30','#E24B4A'];
+new Chart('bmiChart',{type:'doughnut',data:{labels:bmiL,datasets:[{data:bmiD,backgroundColor:bmiC,borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+  plugins:{legend:{position:'right',labels:{font:{size:11},generateLabels:chart=>bmiL.map((l,i)=>({text:`${l}  ${bmiD[i]}人`,fillStyle:bmiC[i],strokeStyle:bmiC[i],lineWidth:0}))}},
+  tooltip:{callbacks:{label:ctx=>`  ${ctx.label}: ${ctx.parsed}人 (${Math.round(ctx.parsed/790*100)}%)`}}}}});
+
+new Chart('monthChart',{type:'bar',data:{labels:['9月','10月','11月','12月','1月','2月','3月','4月','5月','6月','7月'],
+  data:[13,36,28,22,42,22,55,32,54,62,37],
+  datasets:[{data:[13,36,28,22,42,22,55,32,54,62,37],backgroundColor:'#2E75B6',borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.parsed.y}份`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}}}}});
+
+new Chart('bmiGroupChart',{type:'bar',data:{labels:['<24','24-27','27-30','30-35','>35'],
+  datasets:[{data:[27,96,162,268,232],backgroundColor:bmiC,borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.parsed.y}人 (${Math.round(ctx.parsed.y/790*100)}%)`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}}}}});
+
+// S2 成效
+const effDrugs=['Mounjaro','Saxenda','併用/轉換','Ozempic','Wegovy','Contrave','Rybelsus','Jardiance','無藥物','Xenical'];
+const effVals=[7.3,6.5,5.5,4.8,4.5,4.4,3.6,3.4,2.7,2.2];
+new Chart('effBarChart',{type:'bar',data:{labels:effDrugs,
+  datasets:[{data:effVals,backgroundColor:effDrugs.map(d=>DC[d]||'#888'),borderWidth:0}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  平均減重 -${ctx.parsed.x.toFixed(1)} kg`}}},
+  scales:{x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#888',font:{size:11}}}}}});
+
+new Chart('drugVsNoChart',{type:'bar',data:{labels:['平均減重(kg)'],
+  datasets:[
+    {label:'有藥物',data:[6.0],backgroundColor:'#1D9E75',borderWidth:0},
+    {label:'無藥物',data:[3.6],backgroundColor:'#888780',borderWidth:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`  ${ctx.dataset.label}: -${ctx.parsed.y.toFixed(1)} kg`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}},max:8}}}});
+
+new Chart('moEffChart',{type:'line',data:{labels:['1','2','3','4','5','6','7-9','10-12','13+'],
+  datasets:[
+    {label:'人數',data:[58,45,61,41,22,19,40,19,57],borderColor:'#534AB7',backgroundColor:'rgba(83,74,183,.1)',yAxisID:'y',fill:true,tension:.35,pointRadius:4,borderWidth:2},
+    {label:'平均減重kg',data:[3.6,4.2,5.1,6.0,9.0,8.1,8.3,10.5,8.5],borderColor:'#E24B4A',backgroundColor:'transparent',yAxisID:'y1',tension:.35,pointRadius:4,borderWidth:2.5}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?`  ${ctx.parsed.y}人`:`  -${ctx.parsed.y.toFixed(1)} kg`}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:'#888',font:{size:10}},title:{display:true,text:'追蹤月數',color:'#888',font:{size:10}}},
+    y:{position:'left',grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#534AB7',font:{size:10}}},
+    y1:{position:'right',grid:{display:false},ticks:{color:'#E24B4A',font:{size:10},callback:v=>'-'+v+' kg'}}
+  }}});
+
+// S3 藥物
+const dpL=['無藥物','Mounjaro','Ozempic','Contrave','併用/轉換','Wegovy','Xenical','Jardiance','Rybelsus','手術評估','Saxenda'];
+const dpD=[292,139,86,63,57,44,37,30,22,13,7];
+new Chart('drugPieChart',{type:'doughnut',data:{labels:dpL,datasets:[{data:dpD,backgroundColor:dpL.map(d=>DC[d]||'#E24B4A'),borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'52%',
+  plugins:{legend:{position:'right',labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`  ${ctx.label}: ${ctx.parsed}人 (${Math.round(ctx.parsed/790*100)}%)`}}}}});
+
+new Chart('drugGenderChart',{type:'bar',data:{
+  labels:['Mounjaro','Ozempic','Contrave','Xenical','Wegovy','Rybelsus','Jardiance','併用/轉換'],
+  datasets:[
+    {label:'男%',data:[40,44,43,46,34,50,47,40],backgroundColor:'#378ADD',borderWidth:0},
+    {label:'女%',data:[60,56,57,54,66,50,53,60],backgroundColor:'#D4537E',borderWidth:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`  ${ctx.dataset.label}: ${ctx.parsed.y}%`}}},
+  scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:10},maxRotation:20}},y:{stacked:true,max:100,ticks:{color:'#888',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,.06)'}}}}}); 
+
+// 趨勢
+const trendDrugs=Object.keys(DC);
+const trendLabels=['1','2','3','4','5','6','7-9','10+'];
+const trendData={
+  Mounjaro:[-1.6,-2.8,-6.5,-6.8,-7.2,-9.5,-9.8,-12.1],
+  Wegovy:[-1.7,-2.8,0,-4.8,-5.2,-6.3,-8.8,0],
+  Ozempic:[-1.8,-2.6,-6.2,-5.1,-3.8,-7.4,-8.2,-6.8],
+  Rybelsus:[-1.3,-4.0,-3.6,-6.1,-0.2,0,-1.4,-7.1],
+  Contrave:[-0.8,0.2,-0.5,-1.6,-5.0,-5.0,-6.4,-8.5],
+  Xenical:[-0.8,-0.6,-2.2,-6.6,-3.2,1.3,0,-4.0],
+  Jardiance:[-0.2,0.3,-3.6,-5.2,-4.5,-5.2,-6.6,0],
+  Saxenda:[-1.5,-3.0,-6.0,-5.8,-6.5,-7.0,-9.0,-8.0],
+  '無藥物':[-1.4,-2.1,-2.8,-3.2,-3.5,-4.1,-3.8,-4.5],
+};
+let activeD=new Set(['Mounjaro','Ozempic','Contrave']);
+let trendInst=null;
+function buildTrend(){
+  if(trendInst)trendInst.destroy();
+  const datasets=Object.keys(trendData).filter(d=>activeD.has(d)).map(d=>({
+    label:d,data:trendData[d].map(v=>v!==0?Math.abs(v):null),
+    borderColor:DC[d]||'#888',backgroundColor:'transparent',
+    pointBackgroundColor:DC[d]||'#888',pointRadius:5,
+    tension:.35,borderWidth:2.5,spanGaps:true,fill:false
+  }));
+  trendInst=new Chart('trendChart',{type:'line',data:{labels:trendLabels,datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.dataset.label}: -${ctx.parsed.y.toFixed(1)} kg`}}},
+    scales:{x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}},y:{min:0,max:14,grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10},callback:v=>'-'+v+' kg'}}}}});
+}
+const sel=document.getElementById('drugSelector');
+Object.keys(trendData).forEach(d=>{
+  const btn=document.createElement('button');
+  btn.className='drug-btn'+(activeD.has(d)?' on':'');
+  btn.textContent=d;
+  btn.style.background=(DC[d]||'#888')+'22';
+  btn.style.borderColor=DC[d]||'#888';
+  btn.style.color=DC[d]||'#888';
+  btn.onclick=()=>{
+    if(activeD.has(d)){activeD.delete(d);btn.classList.remove('on');}
+    else{activeD.add(d);btn.classList.add('on');}
+    buildTrend();
+  };
+  sel.appendChild(btn);
+});
+buildTrend();
+
+// 藥物成效明細表
+const drugRows=[
+  ['Mounjaro',139,104,'-7.3 (-21.2,+4.0)','23.7%'],
+  ['Saxenda',7,5,'-6.5 (-15.6,-0.2)','—'],
+  ['併用/轉換',57,53,'-5.5 (-15.7,+18.7)','5.3%'],
+  ['Ozempic',86,69,'-4.8 (-21.6,+7.3)','19.8%'],
+  ['Wegovy',44,28,'-4.5 (-13.6,+0.2)','27.3%'],
+  ['Contrave',63,39,'-4.4 (-23.4,+9.3)','46.0%'],
+  ['Rybelsus',22,12,'-3.6 (-8.7,-0.3)','36.4%'],
+  ['Jardiance',30,24,'-3.4 (-15.2,+9.0)','16.7%'],
+  ['無藥物',292,110,'-2.7 (-27.5,+3.9)','59.2%'],
+  ['Xenical',37,21,'-2.2 (-12.3,+1.3)','45.9%'],
+];
+const tbl=document.getElementById('drugDetailTable');
+tbl.innerHTML=`<thead><tr><th>藥物</th><th>人數</th><th>有成效資料</th><th>平均減重 kg（最小, 最大）</th><th>未回診率</th></tr></thead><tbody>`+
+drugRows.map(r=>{
+  const eff=parseFloat(r[3]);
+  const cls=eff<=-5?'eff-good':eff<=-3?'eff-mid':'eff-low';
+  const c=DC[r[0]]||'#0F6E56';
+  return `<tr><td><span class="drug-badge" style="background:${c}22;color:${c}">${r[0]}</span></td><td>${r[1]}</td><td>${r[2]}</td><td class="${cls}">${r[3]}</td><td>${r[4]}</td></tr>`;
+}).join('')+'</tbody>';
+
+// S4 疾病
+const diseases=[
+  {label:'高血壓',n:155,pct:38,color:'#E24B4A'},
+  {label:'糖尿病/前期',n:140,pct:35,color:'#D85A30'},
+  {label:'高血脂',n:133,pct:33,color:'#EF9F27'},
+  {label:'脂肪肝',n:120,pct:30,color:'#BA7517'},
+  {label:'睡眠呼吸中止',n:40,pct:10,color:'#534AB7'},
+  {label:'退化性關節炎',n:28,pct:7,color:'#7F77DD'},
+  {label:'痛風',n:20,pct:5,color:'#AFA9EC'},
+];
+document.getElementById('diseaseBars').innerHTML=diseases.map(d=>
+`<div class="bar-row"><div class="bar-lbl">${d.label}</div>
+<div class="bar-track"><div class="bar-fill" style="width:${d.pct/38*100}%;background:${d.color}"></div></div>
+<div class="bar-val" style="color:${d.color}">${d.n}人 (${d.pct}%)</div></div>`).join('');
+
+new Chart('budgetChart',{type:'bar',data:{labels:['8000~15000','1000~4500','4500~8000','1000以下','考慮手術'],
+  datasets:[{data:[163,140,95,55,18],backgroundColor:['#3C3489','#534AB7','#7F77DD','#AFA9EC','#E24B4A'],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.parsed.y}人 (${Math.round(ctx.parsed.y/403*100)}%)`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:10},maxRotation:20}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}}}}});
+
+new Chart('willChart',{type:'doughnut',data:{labels:['是 (83%)','考慮中 (9%)','否 (8%)'],datasets:[{data:[335,36,32],backgroundColor:['#1D9E75','#EF9F27','#E24B4A'],borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+new Chart('motivChart',{type:'bar',data:{labels:['健康因素','形象','醫師建議','其他'],
+  datasets:[{data:[368,176,112,48],backgroundColor:['#E24B4A','#2E75B6','#534AB7','#028090'],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.parsed.y}人`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}}}}});
+
+const diets=[
+  {label:'外食居多',n:280,pct:70,color:'#1D9E75'},
+  {label:'偏好肉類',n:215,pct:53,color:'#1D9E75'},
+  {label:'偏好飯麵',n:212,pct:53,color:'#0F6E56'},
+  {label:'甜點餅乾',n:155,pct:38,color:'#085041'},
+  {label:'宵夜',n:110,pct:27,color:'#085041'},
+  {label:'含糖飲料',n:105,pct:26,color:'#04342C'},
+];
+document.getElementById('dietBars').innerHTML=diets.map(d=>
+`<div class="bar-row"><div class="bar-lbl">${d.label}</div>
+<div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+<div class="bar-val" style="color:${d.color}">${d.n}人 (${d.pct}%)</div></div>`).join('');
+
+// S5 回診
+new Chart('ageReturnChart',{type:'bar',data:{labels:['<30歲','30-39歲','40-49歲','50-59歲','60+歲'],
+  datasets:[{label:'未回診率',data:[42.5,41.3,39.2,38.5,31.6],backgroundColor:['#E24B4A','#D85A30','#EF9F27','#BA7517','#1D9E75'],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.parsed.y}%`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:10}}},y:{max:60,grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10},callback:v=>v+'%'}}}}});
+
+new Chart('moDistChart',{type:'bar',data:{labels:['1月','2月','3月','4月','5月','6月','7-9月','10-12月','13+月'],
+  datasets:[{data:[58,45,61,41,22,19,40,19,57],backgroundColor:'#534AB7',borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  ${ctx.parsed.y}人`}}},
+  scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}}}}}});
+
+new Chart('drugReturnChart',{type:'bar',data:{
+  labels:['無藥物','Contrave','Xenical','Rybelsus','Wegovy','Mounjaro','Ozempic','Jardiance','併用/轉換'],
+  datasets:[{label:'未回診率',data:[59.2,46.0,45.9,36.4,27.3,23.7,19.8,16.7,5.3],
+  backgroundColor:['#888780','#D85A30','#EF9F27','#AFA9EC','#534AB7','#3C3489','#378ADD','#1D9E75','#0F6E56'],borderWidth:0}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`  未回診率: ${ctx.parsed.x}%`}}},
+  scales:{x:{max:80,grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10},callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:'#888',font:{size:11}}}}}});
+</script>
 </body>
 </html>
