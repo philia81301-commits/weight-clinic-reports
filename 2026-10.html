@@ -15,15 +15,17 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans','Noto Sans TC',sans-serif;background:var(--bg);color:var(--dark);font-size:14px}
-.hero{background:linear-gradient(135deg,var(--navy) 0%,#0d2b4a 60%,#021a30 100%);color:#fff;padding:44px 40px 32px;position:relative;overflow:hidden}
+.hero{background:linear-gradient(120deg,#FFF8E1 0%,#F1FAEC 45%,#E3F3FB 100%);color:var(--dark);padding:36px 40px 32px;position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:36px;align-items:center}
 .hero::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--teal)}
-.hero-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:11px;letter-spacing:1px;color:#8EC4E8;margin-bottom:12px}
-.hero-title{font-size:30px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
-.hero-sub{font-size:13px;color:#8EC4E8;margin-bottom:6px}
-.hero-sign{font-size:12px;color:#B9D8EE;margin-bottom:24px}
-.hero-kpis{display:flex;gap:36px;flex-wrap:wrap}
+.hero-cover{width:100%;height:auto;display:block;border-radius:14px;box-shadow:0 10px 30px rgba(2,60,80,.15)}
+.hero-badge{display:inline-block;background:#fff;border:1px solid #CFE6DA;padding:4px 12px;border-radius:20px;font-size:11px;letter-spacing:1px;color:#1D7A5C;margin-bottom:12px}
+.hero-title{font-size:30px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px;color:#0B4A3F}
+.hero-sub{font-size:13px;color:#3F6B7A;margin-bottom:6px}
+.hero-sign{font-size:12px;color:#5A7E8A;margin-bottom:24px}
+.hero-kpis{display:flex;gap:28px;flex-wrap:wrap}
 .hero-kpi .val{font-size:34px;font-weight:700;line-height:1}
-.hero-kpi .lab{font-size:11px;color:#8EC4E8;margin-top:4px}
+.hero-kpi .lab{font-size:11px;color:#5A7E8A;margin-top:4px}
+@media(max-width:1100px){.hero{grid-template-columns:1fr}.hero-cover-wrap{order:-1;max-width:640px}}
 nav{background:#fff;border-bottom:1px solid #DDE3ED;padding:0 40px;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .nav-tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap}
 .nav-tab:hover{color:var(--navy)}
@@ -90,17 +92,20 @@ footer{text-align:center;padding:24px;color:#aaa;font-size:11px;border-top:1px s
 <body>
 
 <div class="hero">
+  <div class="hero-text">
   <div class="hero-badge">2026 / 10 月度報告</div>
   <div class="hero-title">減重門診月度分析 <span style="background:linear-gradient(135deg,#1D9E75,#028090);color:#fff;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;margin-left:8px">最新更新</span></div>
   <div class="hero-sub">資料截止：2026/10/29 ｜ 個案 n=883 ｜ 評估問卷 n=445（2025/9–2026/10）</div>
   <div class="hero-sign">高榮家醫減重門診｜潘湘如醫師</div>
   <div class="hero-kpis">
-    <div class="hero-kpi"><div class="val" style="color:#5BC8FF">883</div><div class="lab">總個案數（+33）</div></div>
-    <div class="hero-kpi"><div class="val" style="color:#5DCAA5">-4.8 kg</div><div class="lab">有回診平均減重</div></div>
-    <div class="hero-kpi"><div class="val" style="color:#EF9F27">35.5%</div><div class="lab">未回診率（方法B）</div></div>
-    <div class="hero-kpi"><div class="val" style="color:#5BC8FF">66.4%</div><div class="lab">有處方（含手術）</div></div>
-    <div class="hero-kpi"><div class="val" style="color:#5DCAA5">445</div><div class="lab">評估問卷數（+35）</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#1B6FA8">883</div><div class="lab">總個案數（+33）</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#1D8A62">-4.8 kg</div><div class="lab">有回診平均減重</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#C06A00">35.5%</div><div class="lab">未回診率（方法B）</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#1B6FA8">66.4%</div><div class="lab">有處方（含手術）</div></div>
+    <div class="hero-kpi"><div class="val" style="color:#1D8A62">445</div><div class="lab">評估問卷數（+35）</div></div>
   </div>
+  </div>
+  <div class="hero-cover-wrap"><img class="hero-cover" src="img/2026-10-cover.jpg" alt="減重門診月度成效分析 2026年10月 封面" width="1536" height="1024"></div>
 </div>
 
 <nav>
